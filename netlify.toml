@@ -1,0 +1,17 @@
+[build]
+  publish = "."
+
+# Security headers. No CSP because the fonts come from Google Fonts and a
+# CSP that allows them adds more to maintain than it protects here.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

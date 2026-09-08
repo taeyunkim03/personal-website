@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Taeyun Kim</title>
+  <meta name="description" content="Taeyun Kim studies statistics and data science at the University of Washington and works on single-cell RNA sequencing pipelines in the Adams Waldorf Lab.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Taeyun Kim">
+  <meta property="og:description" content="Statistics and data science at the University of Washington. Single-cell RNA sequencing pipelines in the Adams Waldorf Lab, and a rock paper scissors bot that learns how you play.">
+  <meta property="og:site_name" content="Taeyun Kim">
+  <meta name="twitter:card" content="summary">
+  <!-- TODO: both need absolute URLs. Fill in once the site has its address and assets/photo.jpg exists.
+  <meta property="og:url" content="https://SITE/">
+  <meta property="og:image" content="https://SITE/assets/photo.jpg">
+  <meta property="og:image:alt" content="Taeyun Kim">
+  -->
+  <meta name="theme-color" content="#F7F8F9">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="wrap">
+    <nav class="nav" aria-label="Site">
+      <a class="nav-home" href="/">Taeyun Kim</a>
+      <input class="nav-toggle" type="checkbox" id="nav-toggle" aria-label="Menu">
+      <label class="nav-toggle-label" for="nav-toggle">
+        <svg class="icon-open" width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false"><path d="M2 5h18M2 11h18M2 17h18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+        <svg class="icon-close" width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false"><path d="M4 4l14 14M18 4L4 18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+      </label>
+      <ul class="nav-links">
+        <li><a href="/" aria-current="page">about</a></li>
+        <li><a href="/cv.html">cv</a></li>
+        <li><a href="/projects.html">projects</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" class="wrap">
+
+    <section class="intro" aria-label="About">
+      <!-- When assets/photo.jpg exists, delete the placeholder div and uncomment the img. -->
+      <div class="photo photo-placeholder" aria-hidden="true"></div>
+      <!-- <img class="photo" src="/assets/photo.jpg" alt="Taeyun Kim" width="96" height="96"> -->
+      <div class="intro-text">
+        <h1>Taeyun Kim</h1>
+        <p>I study statistics and data science at the University of Washington, and I work in the Adams Waldorf Lab building pipelines that pull cell types out of single-cell RNA sequencing data. The part I keep coming back to is how a model should tell you when not to trust it.</p>
+        <ul class="links">
+          <li><a href="mailto:taeyun.kim03@outlook.com">email</a></li>
+          <li><a href="https://github.com/taeyunkim03">github</a></li>
+          <li><a href="https://www.linkedin.com/in/taeyun-kim">linkedin</a></li>
+          <li><a href="https://orcid.org/0009-0009-3051-6597">orcid</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="game" id="game" aria-labelledby="game-title">
+      <h2 id="game-title">Can you beat a Markov chain?</h2>
+      <p>This bot has no strategy. It just remembers your last two throws and plays whatever tends to beat you after that pattern. Most people lose anyway, because people are bad at being random on purpose.</p>
+
+      <!-- Everything below stays hidden until game.js runs, so without JavaScript the block is just the heading and the description. -->
+      <div class="game-ui" id="game-ui" hidden>
+        <div class="throws" role="group" aria-label="Your throw">
+          <button type="button" class="throw-btn" data-throw="R">Rock</button>
+          <button type="button" class="throw-btn" data-throw="P">Paper</button>
+          <button type="button" class="throw-btn" data-throw="S">Scissors</button>
+        </div>
+        <p class="game-hint">Or press R, P or S.</p>
+
+        <p class="game-result" id="game-result" aria-live="polite"></p>
+
+        <dl class="game-stats">
+          <div><dt>Rounds</dt><dd id="stat-rounds">0</dd></div>
+          <div><dt>Wins</dt><dd id="stat-wins">0</dd></div>
+          <div><dt>Losses</dt><dd id="stat-losses">0</dd></div>
+          <div><dt>Ties</dt><dd id="stat-ties">0</dd></div>
+          <div><dt>Win rate</dt><dd id="stat-rate">0%</dd></div>
+        </dl>
+
+        <p class="game-verdict" id="game-verdict" aria-live="polite"></p>
+
+        <button type="button" class="reset-btn" id="game-reset">Reset</button>
+      </div>
+    </section>
+
+    <section class="now" aria-labelledby="now-title">
+      <h2 id="now-title">Now <span class="updated">September 2026</span></h2>
+      <!-- Replace the five list items below with real copy. Nothing else needs to change. -->
+      <ul>
+        <li>Now 1</li>
+        <li>Now 2</li>
+        <li>Now 3</li>
+        <li>Now 4</li>
+        <li>Now 5</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>Reach me at <a href="mailto:taeyun.kim03@outlook.com">taeyun.kim03@outlook.com</a>.</p>
+      <ul class="links">
+        <li><a href="mailto:taeyun.kim03@outlook.com">email</a></li>
+        <li><a href="https://github.com/taeyunkim03">github</a></li>
+        <li><a href="https://www.linkedin.com/in/taeyun-kim">linkedin</a></li>
+        <li><a href="https://orcid.org/0009-0009-3051-6597">orcid</a></li>
+      </ul>
+      <p>This site has no ads, no analytics and no tracking.</p>
+    </div>
+  </footer>
+
+  <script src="/game.js" defer></script>
+</body>
+</html>

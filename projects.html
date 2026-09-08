@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects by Taeyun Kim</title>
+  <meta name="description" content="Projects by Taeyun Kim, including a Markov chain rock paper scissors bot, reservoir computing experiments and Bayesian inference for vaccine efficacy.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Projects by Taeyun Kim">
+  <meta property="og:description" content="A Markov chain rock paper scissors bot, reservoir computing experiments and Bayesian inference for vaccine efficacy.">
+  <meta property="og:site_name" content="Taeyun Kim">
+  <meta name="twitter:card" content="summary">
+  <!-- TODO: both need absolute URLs. Fill in once the site has its address and assets/photo.jpg exists.
+  <meta property="og:url" content="https://SITE/projects.html">
+  <meta property="og:image" content="https://SITE/assets/photo.jpg">
+  <meta property="og:image:alt" content="Taeyun Kim">
+  -->
+  <meta name="theme-color" content="#F7F8F9">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="wrap">
+    <nav class="nav" aria-label="Site">
+      <a class="nav-home" href="/">Taeyun Kim</a>
+      <input class="nav-toggle" type="checkbox" id="nav-toggle" aria-label="Menu">
+      <label class="nav-toggle-label" for="nav-toggle">
+        <svg class="icon-open" width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false"><path d="M2 5h18M2 11h18M2 17h18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+        <svg class="icon-close" width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" focusable="false"><path d="M4 4l14 14M18 4L4 18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+      </label>
+      <ul class="nav-links">
+        <li><a href="/">about</a></li>
+        <li><a href="/cv.html">cv</a></li>
+        <li><a href="/projects.html" aria-current="page">projects</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" class="wrap">
+    <h1 class="page-title">Projects</h1>
+
+    <div class="projects">
+
+      <article class="project">
+        <h2>Can you beat a Markov chain?</h2>
+        <p>An order-2 Markov chain that learns your rock paper scissors patterns in real time and plays the counter. Built to show that people are much worse at generating random sequences than they think.</p>
+        <p class="project-tools">Vanilla JavaScript, no dependencies.</p>
+        <ul class="project-links">
+          <li><a href="/#game">Play it</a></li>
+          <!-- TODO: once the repo exists, add:
+               <li><a href="https://github.com/taeyunkim03/REPO">Source on GitHub</a></li> -->
+        </ul>
+      </article>
+
+      <article class="project">
+        <h2>Memory, stability and chaos in reservoir computing</h2>
+        <p>Built an echo state network in Python and studied how the spectral radius drives the transition from stable to chaotic dynamics. Forecasted the Lorenz system with the reservoir and linked memory capacity to prediction accuracy, showing that forecasting peaks near the edge of chaos where the reservoir balances memory against stability.</p>
+        <p class="project-tools">Python, NumPy, SciPy.</p>
+        <!-- TODO: add a project-links list here if there is a link to share. -->
+      </article>
+
+      <article class="project">
+        <h2>Likelihood and Bayesian inference for COVID-19 vaccine efficacy</h2>
+        <p>Estimated vaccine efficacy from clinical trial counts using a binomial likelihood model, deriving the maximum likelihood estimate and a confidence interval, then tested the efficacy hypothesis with a likelihood ratio test. Reframed the same problem in a Bayesian setting with a prior on the efficacy parameter and compared the frequentist and Bayesian conclusions.</p>
+        <p class="project-tools">R.</p>
+        <!-- TODO: add a project-links list here if there is a link to share. -->
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p>Reach me at <a href="mailto:taeyun.kim03@outlook.com">taeyun.kim03@outlook.com</a>.</p>
+      <ul class="links">
+        <li><a href="mailto:taeyun.kim03@outlook.com">email</a></li>
+        <li><a href="https://github.com/taeyunkim03">github</a></li>
+        <li><a href="https://www.linkedin.com/in/taeyun-kim">linkedin</a></li>
+        <li><a href="https://orcid.org/0009-0009-3051-6597">orcid</a></li>
+      </ul>
+      <p>This site has no ads, no analytics and no tracking.</p>
+    </div>
+  </footer>
+</body>
+</html>
