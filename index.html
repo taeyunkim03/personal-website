@@ -87,7 +87,7 @@
     </section>
 
     <section class="now" aria-labelledby="now-title">
-      <h2 id="now-title">Now <span class="updated">September 2026</span></h2>
+      <h2 id="now-title">Now <time class="updated" id="now-updated" datetime="2026-09">September 2026</time></h2>
       <!-- Replace the five list items below with real copy. Nothing else needs to change. -->
       <ul>
         <li>Now 1</li>
@@ -112,5 +112,19 @@
   </footer>
 
   <script src="/game.js" defer></script>
+  <script>
+  /* Keeps the "Now" stamp on the current month so it never needs a manual edit.
+     The month written into the markup is the no-JavaScript fallback. Locale is
+     pinned to en-US so the stamp reads the same for every visitor, matching the
+     page's lang. */
+  (function () {
+    'use strict';
+    var el = document.getElementById('now-updated');
+    if (!el) { return; }
+    var now = new Date();
+    el.textContent = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    el.setAttribute('datetime', now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2));
+  })();
+  </script>
 </body>
 </html>
