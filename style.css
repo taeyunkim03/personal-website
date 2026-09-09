@@ -1,6 +1,9 @@
 /* ---------------------------------------------------------------------------
    taeyunkim.netlify.app
-   Light mode only. Tokens below are the design; do not add a dark scheme.
+   Two themes, both driven entirely by the tokens below: the light palette on
+   :root, the dark overrides on [data-theme="dark"]. Nothing outside this block
+   should hard-code a colour, so a theme change never needs edits elsewhere.
+   theme.js sets data-theme before the first paint.
    --------------------------------------------------------------------------- */
 
 :root {
@@ -21,6 +24,24 @@
   --measure: 68ch;
   --gutter: 24px;
   --section: 48px;
+
+  color-scheme: light;
+}
+
+/* Dark theme. Near-black grounds, and the accent lightened so it keeps its
+   contrast against them: the light-mode blue is far too dark to read here. */
+[data-theme="dark"] {
+  --bg: #14171A;
+  --surface: #1B1F23;
+  --surface-high: #262B31;
+  --text: #E6E9EC;
+  --text-dim: #9BA4AD;
+  --border: #2E343B;
+  --accent: #6FB3D9;
+  --accent-hover: #92C7E5;
+  --accent-tint: #1E2C36;
+
+  color-scheme: dark;
 }
 
 @media (min-width: 640px) {
@@ -172,6 +193,7 @@ button {
 }
 
 .nav-home {
+  margin-right: auto;
   color: var(--text);
   font-weight: 500;
   text-decoration: none;
@@ -201,7 +223,6 @@ button {
   justify-content: center;
   width: 44px;
   height: 44px;
-  margin-right: -11px;
   cursor: pointer;
   color: var(--text);
 }
@@ -282,6 +303,52 @@ button {
   }
 }
 
+/* Theme toggle ------------------------------------------------------------ */
+
+/* Hidden by default: without JavaScript the button cannot do anything, and a
+   dead control is worse than no control. theme.js adds .js to <html> before
+   the first paint, so this never flashes in or shifts the layout. */
+.theme-toggle {
+  display: none;
+}
+
+.js .theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -11px;
+  padding: 0;
+  color: var(--text-dim);
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+}
+
+.theme-toggle:hover {
+  color: var(--text);
+}
+
+/* Each theme shows the icon for the theme it would switch to. */
+.theme-toggle .icon-sun {
+  display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .theme-toggle {
+    margin-left: 8px;
+  }
+}
+
 /* Intro ------------------------------------------------------------------- */
 
 .intro {
@@ -295,14 +362,10 @@ button {
 
 .photo {
   flex-shrink: 0;
-  width: 96px;
-  height: 96px;
+  width: 128px;
+  height: 128px;
   border-radius: 50%;
   object-fit: cover;
-}
-
-.photo-placeholder {
-  background: var(--surface-high);
 }
 
 .intro-text p {
@@ -336,7 +399,7 @@ button {
     font-size: 1.375rem;
   }
 
-  .links {
+  .intro .links {
     justify-content: flex-start;
   }
 }
@@ -513,8 +576,24 @@ button {
 }
 
 .footer .links {
-  justify-content: flex-start;
-  margin: 12px 0 16px;
+  gap: 4px;
+  margin: 0;
+}
+
+/* Icon-only links: 44px box so the tap target is bigger than the 20px glyph. */
+.footer .links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--text-dim);
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.footer .links a:hover {
+  color: var(--accent);
 }
 
 /* Page title (cv, projects) ---------------------------------------------- */
@@ -676,6 +755,22 @@ button {
     margin: 2cm;
   }
 
+  /* Paper is white whichever theme is on screen, so force the light tokens. */
+  :root,
+  [data-theme="dark"] {
+    --bg: #FFFFFF;
+    --surface: #FFFFFF;
+    --surface-high: #FFFFFF;
+    --text: #24282C;
+    --text-dim: #5C646B;
+    --border: #DFE3E6;
+    --accent: #2F6F8F;
+    --accent-hover: #24576F;
+    --accent-tint: #E4EEF3;
+
+    color-scheme: light;
+  }
+
   body {
     background: #FFFFFF;
     font-size: 11pt;
@@ -683,6 +778,7 @@ button {
 
   .skip,
   .nav,
+  .theme-toggle,
   .footer,
   .game,
   .cv-download {
