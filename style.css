@@ -16,6 +16,7 @@
   --accent: #2F6F8F;
   --accent-hover: #24576F;
   --accent-tint: #E4EEF3;
+  --accent-warm: #A6432A;
 
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -40,6 +41,7 @@
   --accent: #6FB3D9;
   --accent-hover: #92C7E5;
   --accent-tint: #1E2C36;
+  --accent-warm: #E39074;
 
   color-scheme: dark;
 }
@@ -143,6 +145,13 @@ button {
   color: var(--text-dim);
 }
 
+/* Key terms in prose. Warm on purpose: the blue accent means "link" on this
+   site, and these are not links. Links also carry an underline, which is the
+   cue that keeps the two apart for anyone who does not separate them by hue. */
+.term {
+  color: var(--accent-warm);
+}
+
 /* One focus treatment for everything that can take focus. */
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -199,6 +208,14 @@ button {
   text-decoration: none;
 }
 
+/* The homepage drops the corner link: the h1 right below it already carries the
+   name, and a second link to "/" in the same header earns nothing. With nothing
+   on the left, the row aligns right rather than leaning on .nav-home's auto
+   margin to push it there. */
+.nav-bare {
+  justify-content: flex-end;
+}
+
 .nav-home:hover {
   color: var(--text);
 }
@@ -247,6 +264,7 @@ button {
 
 .nav-links {
   display: none;
+  order: 1;
   flex-basis: 100%;
   margin: 12px 0 0;
   padding: 8px 0 0;
@@ -290,6 +308,7 @@ button {
   .nav-links,
   .nav-toggle:checked ~ .nav-links {
     display: flex;
+    order: 0;
     flex-basis: auto;
     gap: 24px;
     margin: 0;
@@ -767,6 +786,7 @@ button {
     --accent: #2F6F8F;
     --accent-hover: #24576F;
     --accent-tint: #E4EEF3;
+    --accent-warm: #A6432A;
 
     color-scheme: light;
   }
