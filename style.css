@@ -7,16 +7,32 @@
    --------------------------------------------------------------------------- */
 
 :root {
-  --bg: #F7F8F9;
-  --surface: #FFFFFF;
-  --surface-high: #EEF0F2;
-  --text: #24282C;
-  --text-dim: #5C646B;
-  --border: #DFE3E6;
+  /* Warm paper rather than cool grey. The greys are warmed to match: a cool
+     border or a pure-white card reads as a mistake against cream. The blue
+     accent stays, since blue on cream is the pairing this look is built on. */
+  --bg: #FAF5E9;
+  --surface: #FFFCF4;
+  --surface-high: #F0E8D4;
+  --text: #2A2620;
+  --text-dim: #6B6355;
+  --border: #E5DCC6;
   --accent: #2F6F8F;
   --accent-hover: #24576F;
   --accent-tint: #E4EEF3;
   --accent-warm: #A6432A;
+
+  /* Markov grid. Warm ramp = what the model has learned; --grid-live = where
+     you are right now: the ring, the marker dot and the recency trail. It is
+     the same red in both themes on purpose, since the cells it sits on stay
+     light in both. Blue is left meaning exactly one thing: interactive. */
+  --grid-0: #F1EEE8;
+  --grid-1: #E5DDCE;
+  --grid-2: #D2C4AC;
+  --grid-3: #B9A585;
+  --grid-4: #A89372;
+  --grid-label: #24282C;
+  --grid-edge: #A89372;
+  --grid-live: #D93A2B;
 
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -42,6 +58,17 @@
   --accent-hover: #92C7E5;
   --accent-tint: #1E2C36;
   --accent-warm: #E39074;
+
+  /* The grid ramp does not invert: cells stay in the light zone so the grid
+     reads as a pale block, and the dark #24282C label works at every level. */
+  --grid-0: #EBE9E4;
+  --grid-1: #DCD4C4;
+  --grid-2: #C8B99C;
+  --grid-3: #B09B77;
+  --grid-4: #997F58;
+  --grid-label: #24282C;
+  --grid-edge: #997F58;
+  --grid-live: #D93A2B;
 
   color-scheme: dark;
 }
@@ -394,6 +421,41 @@ button {
   line-height: 1.45;
 }
 
+/* Intro line reveal ------------------------------------------------------- */
+
+/* The intro paragraph arrives a beat after the page settles, one word at a
+   time. Pure CSS: the site works without JavaScript except the game.
+
+   .reveal sits on the <p> itself, so every word span is a direct child. The
+   two coloured terms carry .term on the word spans rather than a wrapper,
+   which would push them out of reach of the child selector below.
+
+   The words carry no static opacity, so their resting state is fully opaque.
+   Only the animation moves them from transparent to opaque, which means a
+   browser that drops the rule still renders the sentence normally. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal > span {
+    display: inline-block;
+    /* both holds the transparent first frame through the delay: that pause is
+       the effect. */
+    animation: word-in 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(600ms + var(--i) * 50ms);
+  }
+}
+
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .links {
   display: flex;
   flex-wrap: wrap;
@@ -571,9 +633,16 @@ button {
 /* The nine two-throw states. Row is the older throw, column the newer one, so
    the column you are in is always the row you move to next.
 
-   Colours here are literal rather than tokenised: the fill ramp is a fixed
-   five-step scale that has to stay legible against the dark cell labels, so it
-   does not invert with the theme. See the note in index.html. */
+   Colours come from the --grid-* tokens. game.js writes fills as var()
+   references, so toggling the theme recolours the whole grid live, mid-game,
+   without a render call. */
+
+.demo-note {
+  margin: 12px 0 0;
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  text-align: center;
+}
 
 .chain {
   display: block;
@@ -585,20 +654,20 @@ button {
 }
 
 .chain-cell {
-  fill: #EEF0F2;
-  stroke: #DFE3E6;
+  fill: var(--grid-0);
+  stroke: var(--border);
   stroke-width: 0.5;
 }
 
 /* Visited recently, but not where the marker is now. */
 .chain-cell.is-trail {
-  stroke: #2F6F8F;
+  stroke: var(--grid-live);
   stroke-width: 0.5;
   stroke-opacity: 0.4;
 }
 
 .chain-cell.is-current {
-  stroke: #2F6F8F;
+  stroke: var(--grid-live);
   stroke-width: 2;
   stroke-opacity: 1;
 }
@@ -608,19 +677,24 @@ button {
   font-size: 13px;
   text-anchor: middle;
   dominant-baseline: central;
-  fill: #24282C;
+  fill: var(--grid-label);
 }
 
 .chain-edge {
   fill: none;
-  stroke: #2F6F8F;
+  stroke: var(--grid-edge);
   stroke-width: 1;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
+/* The arrowhead is part of the edge, so it follows the edge colour. */
+#chain-arrow path {
+  fill: var(--grid-edge);
+}
+
 .chain-marker {
-  fill: #2F6F8F;
+  fill: var(--grid-live);
 }
 
 /* Motion is opt-out: with reduced motion the grid still updates, instantly. */
@@ -871,6 +945,14 @@ button {
     --accent-hover: #24576F;
     --accent-tint: #E4EEF3;
     --accent-warm: #A6432A;
+    --grid-0: #F1EEE8;
+    --grid-1: #E5DDCE;
+    --grid-2: #D2C4AC;
+    --grid-3: #B9A585;
+    --grid-4: #A89372;
+    --grid-label: #24282C;
+    --grid-edge: #A89372;
+    --grid-live: #D93A2B;
 
     color-scheme: light;
   }

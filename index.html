@@ -10,7 +10,7 @@
   <meta property="og:description" content="Statistics and data science at the University of Washington. Single-cell RNA sequencing pipelines in the Adams Waldorf Lab, and a rock paper scissors bot that learns how you play.">
   <meta property="og:site_name" content="Taeyun Kim">
   <meta name="twitter:card" content="summary">
-  <meta name="theme-color" content="#F7F8F9">
+  <meta name="theme-color" content="#FAF5E9">
   <script src="/theme.js"></script>
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,7 +46,19 @@
       <img class="photo" src="/assets/profile_pic.jpg" alt="Taeyun Kim" width="128" height="128">
       <div class="intro-text">
         <h1>Taeyun Kim</h1>
-        <p>I'm a <span class="term">Statistics - Data Science</span> major at the University of Washington, minoring in Applied Mathematics, and I work as a <span class="term">bioinformatics</span> research assistant in the Adams Waldorf Lab. I'm mostly interested in the predictions a model should decline to make.</p>
+        <p class="reveal">
+          <span style="--i:0">I'm</span> <span style="--i:1">a</span> <span class="term" style="--i:2">Statistics</span> <span class="term" style="--i:3">-</span>
+          <span class="term" style="--i:4">Data</span> <span class="term" style="--i:5">Science</span> <span style="--i:6">major</span> <span style="--i:7">at</span>
+          <span style="--i:8">the</span> <span style="--i:9">University</span> <span style="--i:10">of</span> <span style="--i:11">Washington,</span>
+          <span style="--i:12">minoring</span> <span style="--i:13">in</span> <span style="--i:14">Applied</span> <span style="--i:15">Mathematics,</span>
+          <span style="--i:16">and</span> <span style="--i:17">I</span> <span style="--i:18">work</span> <span style="--i:19">as</span>
+          <span style="--i:20">a</span> <span class="term" style="--i:21">bioinformatics</span> <span style="--i:22">research</span> <span style="--i:23">assistant</span>
+          <span style="--i:24">in</span> <span style="--i:25">the</span> <span style="--i:26">Adams</span> <span style="--i:27">Waldorf</span>
+          <span style="--i:28">Lab.</span> <span style="--i:29">I'm</span> <span style="--i:30">mostly</span> <span style="--i:31">interested</span>
+          <span style="--i:32">in</span> <span style="--i:33">the</span> <span style="--i:34">predictions</span> <span style="--i:35">a</span>
+          <span style="--i:36">model</span> <span style="--i:37">should</span> <span style="--i:38">decline</span> <span style="--i:39">to</span>
+          <span style="--i:40">make.</span>
+        </p>
         <ul class="links">
           <li><a href="mailto:taeyun.kim03@outlook.com">Email</a></li>
           <li><a href="https://github.com/taeyunkim03">GitHub</a></li>
@@ -71,6 +83,10 @@
 
         <p class="game-result" id="game-result" aria-live="polite"></p>
 
+        <!-- Shown only while the idle demo runs, so nobody mistakes the
+             moving numbers for their own score. game.js reveals and hides it. -->
+        <p class="demo-note" id="demo-note" hidden>Demo running. Press a button to play.</p>
+
 
         <svg class="chain" viewBox="0 0 320 264" width="100%" role="img"
              aria-labelledby="chain-title" aria-describedby="chain-desc">
@@ -82,7 +98,7 @@
                  edge. -->
             <marker id="chain-arrow" viewBox="0 0 8 8" refX="4" refY="4"
                     markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto">
-              <path d="M0 0.5L7 4L0 7.5Z" fill="#2F6F8F"/>
+              <path d="M0 0.5L7 4L0 7.5Z"/>
             </marker>
           </defs>
           <!-- Edges sit behind the cells, so a line crossing a cell on its way

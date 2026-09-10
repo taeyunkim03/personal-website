@@ -12,7 +12,7 @@
   'use strict';
 
   var KEY = 'theme';
-  var META = { light: '#F7F8F9', dark: '#14171A' };
+  var META = { light: '#FAF5E9', dark: '#14171A' };
   var root = document.documentElement;
 
   // Lets the stylesheet reveal the button. Without JavaScript the button could

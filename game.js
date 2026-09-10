@@ -27,12 +27,26 @@
 
   // Counts are not pre-seeded. The first rounds really are random, and the
   // bot only starts to bite once it has seen a pattern more than once.
-  var last = [];   // Player's previous throws, at most two.
-  var counts = {}; // state -> { R: n, P: n, S: n }
-  var rounds = 0;
-  var wins = 0;
-  var losses = 0;
-  var ties = 0;
+  //
+  // A whole game lives in one bundle, and there are two bundles: the idle
+  // demo plays into its own and the visitor plays into the other. Handover is
+  // a pointer swap to an object the demo never touched, so a trained model
+  // cannot leak into somebody's first real round through a missed field.
+  function freshGame() {
+    return {
+      last: [],    // previous throws, at most two
+      counts: {},  // state -> { R: n, P: n, S: n }
+      rounds: 0,
+      wins: 0,
+      losses: 0,
+      ties: 0,
+      visited: []  // recently occupied states; only the grid's trail reads it
+    };
+  }
+
+  var liveGame = freshGame(); // the visitor's game; the demo never writes here
+  var demoGame = freshGame(); // the demo's game; abandoned at handover
+  var active = liveGame;      // whichever bundle the renderers draw
 
   var buttons = ui.querySelectorAll('[data-throw]');
   var resultEl = document.getElementById('game-result');
@@ -50,16 +64,16 @@
     return list[Math.floor(Math.random() * list.length)];
   }
 
-  function currentState() {
-    return last.length === 2 ? last[0] + last[1] : null;
+  function stateOf(game) {
+    return game.last.length === 2 ? game.last[0] + game.last[1] : null;
   }
 
-  function botThrow() {
-    var state = currentState();
-    if (state === null || !counts[state] || Math.random() < EXPLORE) {
+  function botThrowFor(game) {
+    var state = stateOf(game);
+    if (state === null || !game.counts[state] || Math.random() < EXPLORE) {
       return pick(THROWS);
     }
-    var c = counts[state];
+    var c = game.counts[state];
     var max = Math.max(c.R, c.P, c.S);
     var likely = THROWS.filter(function (t) { return c[t] === max; });
     var predicted = pick(likely); // Ties broken at random.
@@ -72,30 +86,52 @@
   }
 
   // Record what the player threw after the current state, then advance it.
-  function learn(player) {
-    var state = currentState();
+  function learnInto(game, player) {
+    var state = stateOf(game);
     if (state !== null) {
-      if (!counts[state]) { counts[state] = { R: 0, P: 0, S: 0 }; }
-      counts[state][player] += 1;
+      if (!game.counts[state]) { game.counts[state] = { R: 0, P: 0, S: 0 }; }
+      game.counts[state][player] += 1;
     }
-    last.push(player);
-    if (last.length > 2) { last.shift(); }
+    game.last.push(player);
+    if (game.last.length > 2) { game.last.shift(); }
+  }
+
+  // One complete round against a given bundle. Real play and the idle demo
+  // both come through here, so the model logic cannot fork into two copies
+  // that drift apart.
+  function playRound(game, player) {
+    var bot = botThrowFor(game);
+    var result = outcome(player, bot);
+
+    game.rounds += 1;
+    if (result === 'win') { game.wins += 1; }
+    else if (result === 'loss') { game.losses += 1; }
+    else { game.ties += 1; }
+
+    learnInto(game, player);
+
+    var state = stateOf(game);
+    if (state !== null) {
+      game.visited.push(state);
+      if (game.visited.length > 20) { game.visited.shift(); }
+    }
+    return { bot: bot, result: result };
   }
 
   function winRate() {
-    return rounds === 0 ? 0 : Math.round(100 * wins / rounds);
+    return active.rounds === 0 ? 0 : Math.round(100 * active.wins / active.rounds);
   }
 
   function renderStats() {
-    stat.rounds.textContent = String(rounds);
-    stat.wins.textContent = String(wins);
-    stat.losses.textContent = String(losses);
-    stat.ties.textContent = String(ties);
+    stat.rounds.textContent = String(active.rounds);
+    stat.wins.textContent = String(active.wins);
+    stat.losses.textContent = String(active.losses);
+    stat.ties.textContent = String(active.ties);
     stat.rate.textContent = winRate() + '%';
   }
 
   function renderVerdict() {
-    if (rounds < 10) {
+    if (active.rounds < 10) {
       verdictEl.textContent = '';
       return;
     }
@@ -134,21 +170,20 @@
   var CELL_W = 88;
   var CELL_H = 56;
 
+  // var() references, not resolved hex: the browser resolves them against the
+  // active theme, so toggling light/dark recolours every cell instantly
+  // without another render.
   var FILL_STOPS = [
-    [0, '#EEF0F2'],
-    [1, '#DCE7EC'],
-    [3, '#BFD5E0'],
-    [6, '#8FB6C8'],
-    [11, '#5E93AC']
+    [0, 'var(--grid-0)'],
+    [1, 'var(--grid-1)'],
+    [3, 'var(--grid-2)'],
+    [6, 'var(--grid-3)'],
+    [11, 'var(--grid-4)']
   ];
 
   var chainEl = document.querySelector('.chain');
   var descEl = document.getElementById('chain-desc');
   var markerEl = document.getElementById('chain-marker');
-
-  // Which cells the player has passed through, most recent last. Used only for
-  // the recency trail; the model itself never reads it.
-  var visited = [];
 
   // The brief puts both the label and the marker at the cell centre, where they
   // sit on top of each other and the state text becomes unreadable. The label
@@ -170,7 +205,7 @@
   }
 
   function totalFor(state) {
-    var c = counts[state];
+    var c = active.counts[state];
     return c ? c.R + c.P + c.S : 0;
   }
 
@@ -217,7 +252,7 @@
     if (total === 0) {
       return 'Current state ' + state + ', not seen before. The bot will play at random.';
     }
-    var c = counts[state];
+    var c = active.counts[state];
     var max = Math.max(c.R, c.P, c.S);
     var likely = THROWS.filter(function (t) { return c[t] === max; });
     var names = likely.map(function (t) { return NAME[t]; }).join(' or ');
@@ -225,13 +260,18 @@
            (total === 1 ? ' time. ' : ' times. ') + 'Most often followed by ' + names + '.';
   }
 
+  // Everything painted here is written as an inline style, never as an SVG
+  // presentation attribute. A stylesheet rule outranks a presentation
+  // attribute, so `setAttribute('fill', ...)` against a CSS `.chain-cell { fill }`
+  // is silently discarded and every cell keeps the base colour.
   function renderChain() {
     if (!chainEl) { return; }
 
-    var state = currentState();
+    var state = stateOf(active);
 
     // Fills, plus the ring on the current cell and the fading trail behind it.
     var trail = [];
+    var visited = active.visited;
     for (var v = visited.length - 1; v >= 0 && trail.length < 3; v -= 1) {
       if (visited[v] !== state && trail.indexOf(visited[v]) === -1) { trail.push(visited[v]); }
     }
@@ -241,7 +281,7 @@
         var name = THROWS[r] + THROWS[c];
         var cell = document.getElementById('cell-' + name);
         if (!cell) { continue; }
-        cell.setAttribute('fill', fillFor(totalFor(name)));
+        cell.style.fill = fillFor(totalFor(name));
         cell.setAttribute('class',
           'chain-cell' + (name === state ? ' is-current' : (trail.indexOf(name) !== -1 ? ' is-trail' : '')));
       }
@@ -253,7 +293,7 @@
       var edge = document.getElementById('edge-' + THROWS[t]);
       if (!edge) { continue; }
       if (state === null) {
-        edge.setAttribute('opacity', '0');
+        edge.style.opacity = '0';
         continue;
       }
       var srcRow = idx(state.charAt(0));
@@ -264,25 +304,36 @@
       edge.setAttribute('d', srcRow === dstRow
         ? sameRowEdge(srcCol, dstCol, srcRow, 12 + t * 10)
         : straightEdge(srcCol, srcRow, dstCol, dstRow));
-      edge.setAttribute('opacity', '1');
+      edge.style.opacity = '1';
 
       if (total === 0) {
         // No history here, so the bot is about to throw at random. Dashes say so.
-        edge.setAttribute('stroke-width', '1');
-        edge.setAttribute('stroke-dasharray', '3 3');
+        edge.style.strokeWidth = '1';
+        edge.style.strokeDasharray = '3 3';
       } else {
-        edge.setAttribute('stroke-width', String(1 + 4 * (counts[state][THROWS[t]] / total)));
-        edge.removeAttribute('stroke-dasharray');
+        edge.style.strokeWidth = String(1 + 4 * (active.counts[state][THROWS[t]] / total));
+        edge.style.strokeDasharray = '';
       }
     }
 
     if (markerEl) {
       if (state === null) {
-        markerEl.setAttribute('opacity', '0');
+        markerEl.style.opacity = '0';
       } else {
-        markerEl.setAttribute('opacity', '1');
-        markerEl.style.transform =
+        var target =
           'translate(' + markerX(idx(state.charAt(1))) + 'px, ' + centreY(idx(state.charAt(0))) + 'px)';
+        if (markerEl.style.opacity !== '1') {
+          // First appearance: place it, then fade it in. Without this the
+          // transform transitions from its initial identity, so the marker
+          // visibly flies in from the SVG's top-left corner.
+          markerEl.style.transition = 'none';
+          markerEl.style.transform = target;
+          void markerEl.getBoundingClientRect(); // commit the jump
+          markerEl.style.transition = '';
+        } else {
+          markerEl.style.transform = target;
+        }
+        markerEl.style.opacity = '1';
       }
     }
 
@@ -291,41 +342,97 @@
   }
 
   function play(player) {
-    var bot = botThrow();
-    var result = outcome(player, bot);
+    stopDemo(); // The first real interaction ends the demo before the round lands.
 
-    rounds += 1;
-    if (result === 'win') { wins += 1; }
-    else if (result === 'loss') { losses += 1; }
-    else { ties += 1; }
+    var round = playRound(active, player);
 
-    learn(player);
-
-    var visitedState = currentState();
-    if (visitedState !== null) {
-      visited.push(visitedState);
-      if (visited.length > 20) { visited.shift(); }
-    }
-
-    renderResult(player, bot, result);
+    renderResult(player, round.bot, round.result);
     renderStats();
     renderVerdict();
     renderChain();
   }
 
   function reset() {
-    last = [];
-    counts = {};
-    rounds = 0;
-    wins = 0;
-    losses = 0;
-    ties = 0;
-    visited = [];
+    stopDemo();
+    liveGame = freshGame();
+    active = liveGame;
     resultEl.textContent = '';
     verdictEl.textContent = '';
     renderStats();
     renderChain();
   }
+
+  /* Idle self-play ----------------------------------------------------------
+   *
+   * Until somebody plays, a simulated opponent throws every 900ms so the grid
+   * demonstrates itself: the marker hops, cells darken, edges thicken. The
+   * first real interaction stops it for good and hands over liveGame, on
+   * which nothing has ever been learned.
+   */
+
+  var DEMO_TICK_MS = 900;
+  var demoNote = document.getElementById('demo-note');
+  var demoTimer = null;      // the pending tick, if one is scheduled
+  var demoStartTimer = null; // the settle delay before the first tick
+  var demoStopped = false;   // once true, the demo never runs again
+  var demoPrev = null;       // the simulated player's previous throw
+
+  // Humans under-repeat, so the simulated player does too: it repeats 15% of
+  // the time where uniform random would repeat 33%. That is the skew the bot
+  // visibly finds, without winning so hard the demo looks staged.
+  function demoThrow() {
+    if (demoPrev === null) { return pick(THROWS); }
+    if (Math.random() < 0.15) { return demoPrev; }
+    return pick(THROWS.filter(function (t) { return t !== demoPrev; }));
+  }
+
+  function demoTick() {
+    demoTimer = null;
+    if (demoStopped) { return; }
+    if (document.hidden) { return; } // the visibilitychange handler resumes
+
+    demoPrev = demoThrow();
+    playRound(demoGame, demoPrev);
+
+    // Deliberately no renderResult and no renderVerdict. The result line is a
+    // polite live region that must not narrate a demo round every 900ms, and
+    // the verdict addresses a visitor who is not playing yet.
+    renderStats();
+    renderChain();
+
+    demoTimer = setTimeout(demoTick, DEMO_TICK_MS);
+  }
+
+  function stopDemo() {
+    if (demoStopped) { return; }
+    demoStopped = true;
+    if (demoStartTimer !== null) { clearTimeout(demoStartTimer); demoStartTimer = null; }
+    if (demoTimer !== null) { clearTimeout(demoTimer); demoTimer = null; }
+    if (demoNote) { demoNote.hidden = true; }
+    active = liveGame; // Handover: zero everywhere by construction, not cleanup.
+  }
+
+  // The demo waits two seconds so the page can settle first. With reduced
+  // motion it never runs at all: the grid sits empty until a real click.
+  demoStartTimer = setTimeout(function () {
+    demoStartTimer = null;
+    if (demoStopped) { return; }
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+    active = demoGame;
+    if (demoNote) { demoNote.hidden = false; }
+    demoTick();
+  }, 2000);
+
+  // A background tab should not burn a timer for an hour. Pause while hidden,
+  // resume on return, unless the demo has already been stopped.
+  document.addEventListener('visibilitychange', function () {
+    if (demoStopped || active !== demoGame) { return; }
+    if (document.hidden) {
+      if (demoTimer !== null) { clearTimeout(demoTimer); demoTimer = null; }
+    } else if (demoTimer === null) {
+      demoTimer = setTimeout(demoTick, DEMO_TICK_MS);
+    }
+  });
 
   Array.prototype.forEach.call(buttons, function (button) {
     button.addEventListener('click', function () {
