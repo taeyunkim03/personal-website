@@ -484,8 +484,20 @@ button {
 }
 
 .game-result {
+  /* Holds one line once there is a result, so the grid does not jump between
+     rounds. Both margins are explicit: the inherited 1em bottom margin is
+     larger than the grid's top margin, and adjacent margins collapse to the
+     larger one, so leaving it would quietly win. */
   min-height: 1.65em;
-  margin-top: 24px;
+  margin: 16px 0 12px;
+}
+
+/* Before the first round this line has nothing in it, and reserving a full
+   line there leaves a visible hole between the hint and the grid. Collapse it
+   until there is something to say. */
+.game-result:empty {
+  min-height: 0;
+  margin: 0;
 }
 
 .game-stats {
@@ -551,6 +563,78 @@ button {
 
   .throw-btn {
     flex: 1;
+  }
+}
+
+/* Markov chain grid ------------------------------------------------------- */
+
+/* The nine two-throw states. Row is the older throw, column the newer one, so
+   the column you are in is always the row you move to next.
+
+   Colours here are literal rather than tokenised: the fill ramp is a fixed
+   five-step scale that has to stay legible against the dark cell labels, so it
+   does not invert with the theme. See the note in index.html. */
+
+.chain {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  /* Matches the 12px below the grid, so it sits evenly between the result line
+     and the stats rather than floating. */
+  margin: 12px auto 0;
+}
+
+.chain-cell {
+  fill: #EEF0F2;
+  stroke: #DFE3E6;
+  stroke-width: 0.5;
+}
+
+/* Visited recently, but not where the marker is now. */
+.chain-cell.is-trail {
+  stroke: #2F6F8F;
+  stroke-width: 0.5;
+  stroke-opacity: 0.4;
+}
+
+.chain-cell.is-current {
+  stroke: #2F6F8F;
+  stroke-width: 2;
+  stroke-opacity: 1;
+}
+
+.chain-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: #24282C;
+}
+
+.chain-edge {
+  fill: none;
+  stroke: #2F6F8F;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chain-marker {
+  fill: #2F6F8F;
+}
+
+/* Motion is opt-out: with reduced motion the grid still updates, instantly. */
+@media (prefers-reduced-motion: no-preference) {
+  .chain-cell {
+    transition: fill 400ms ease, stroke 200ms ease, stroke-width 200ms ease, stroke-opacity 200ms ease;
+  }
+
+  .chain-edge {
+    transition: stroke-width 300ms ease, opacity 300ms ease;
+  }
+
+  .chain-marker {
+    transition: transform 300ms ease-out, opacity 300ms ease;
   }
 }
 
