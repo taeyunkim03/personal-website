@@ -102,8 +102,13 @@
    * screen a 13.5-unit label renders near 7px and cannot be read. */
 
   var DIST = 3.2;
-  var WIDE = { w: 660, h: 410, cx: 330, cy: 200, sc: 168 };
-  var NARROW = { w: 360, h: 420, cx: 180, cy: 205, sc: 96 };
+  // The cloud is taller than it is wide, so the old 660-wide frame left large
+  // dead margins either side and made everything render small. Narrowing the
+  // box scales the whole drawing up at the same container width; sc then adds
+  // a little more, bounded by how close the outermost point may come to an
+  // edge before its label stops fitting.
+  var WIDE = { w: 560, h: 410, cx: 280, cy: 200, sc: 176 };
+  var NARROW = { w: 360, h: 420, cx: 180, cy: 205, sc: 124 };
   var view = WIDE;
 
   var coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;

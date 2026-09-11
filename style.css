@@ -34,6 +34,10 @@
   --grid-edge: #A89372;
   --grid-live: #D93A2B;
 
+  /* The panel behind the cloud. A hair deeper than the page, where the game's
+     card is a hair lighter, so the two never read as the same component. */
+  --latent-bg: #F4EEDE;
+
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -69,6 +73,7 @@
   --grid-label: #24282C;
   --grid-edge: #997F58;
   --grid-live: #D93A2B;
+  --latent-bg: #181C20;
 
   color-scheme: dark;
 }
@@ -758,7 +763,11 @@ button {
    page. The aspect ratio matches the viewBox at each breakpoint. */
 .latent-canvas {
   margin-top: 16px;
-  aspect-ratio: 660 / 410;
+  /* Matches the viewBox at this breakpoint, so the box is sized before the SVG
+     paints and nothing reflows. */
+  aspect-ratio: 560 / 410;
+  background: var(--latent-bg);
+  border-radius: 4px;
 }
 
 .cloud {
@@ -1032,6 +1041,7 @@ button {
     --grid-label: #24282C;
     --grid-edge: #A89372;
     --grid-live: #D93A2B;
+    --latent-bg: #F4EEDE;
 
     color-scheme: light;
   }
