@@ -18,38 +18,64 @@
 
   var NS = 'http://www.w3.org/2000/svg';
 
+  // Centres sit further out than the clusters they name would need on their
+  // own: the clusters are wider now and were starting to touch.
   var CENTRES = [
-    [-0.52,  0.10,  0.18],  // 0 statistics and data science
-    [ 0.48,  0.20, -0.22],  // 1 the lab
-    [ 0.20, -0.30, -0.45],  // 2 computing
-    [-0.15,  0.58, -0.35],  // 3 math and modelling
-    [-0.05, -0.55,  0.38]   // 4 personal
+    [-0.60,  0.12,  0.21],  // 0 statistics and data science
+    [ 0.55,  0.23, -0.25],  // 1 the lab
+    [ 0.23, -0.35, -0.52],  // 2 computing
+    [-0.17,  0.67, -0.40],  // 3 math and modelling
+    [-0.06, -0.63,  0.44]   // 4 personal
   ];
 
-  // Cluster names live in the comments above and never render.
+  // Sampling radius per cluster, scaled by the cube root of the point count so
+  // density stays roughly even, with personal loosened on purpose so the cloud
+  // does not read as five identical blobs.
+  var RADII = [0.36, 0.36, 0.36, 0.34, 0.42];
+
+  // Cluster names live in the comments and never render.
   var POINTS = [
+    // 0 statistics and data science (21)
     ['Hypothesis testing',0],['Regression',0],['Generalized linear models',0],
-    ['A/B testing',0],['Causal inference',0],['Multiple testing',0],
-    ['Bootstrap',0],['Maximum likelihood',0],['Bayesian inference',0],
-    ['Cross-validation',0],['Conformal prediction',0],['Calibration',0],
+    ['Mixed effects models',0],['Nonparametric methods',0],['Survival analysis',0],
+    ['Time series',0],['A/B testing',0],['Experimental design',0],
+    ['Statistical power',0],['Causal inference',0],['Multiple testing',0],
+    ['Missing data',0],['Bootstrap',0],['Maximum likelihood',0],
+    ['Bayesian inference',0],['Cross-validation',0],['Regularization',0],
+    ['Conformal prediction',0],['Calibration',0],['Biostatistics',0],
 
-    ['Single-cell RNA-seq',1],['Cell type annotation',1],['Unsupervised clustering',1],
-    ['Differential expression',1],['Quality control',1],['Batch integration',1],
-    ['Deep generative models',1],['Read alignment',1],['Pigtail macaques',1],
-    ['Cross-species atlases',1],['Bulk deconvolution',1],['Flu and pregnancy',1],
+    // 1 the lab (20)
+    ['Single-cell RNA-seq',1],['Bulk RNA-seq',1],['Spatial transcriptomics',1],
+    ['Count matrices',1],['Read alignment',1],['Quality control',1],
+    ['Unsupervised clustering',1],['Cell type annotation',1],['Marker genes',1],
+    ['Differential expression',1],['Gene set enrichment',1],['Pseudotime',1],
+    ['Batch integration',1],['Deep generative models',1],['Bulk deconvolution',1],
+    ['Cross-species atlases',1],['BLAST',1],['Partek',1],
+    ['Pigtail macaques',1],['Flu and pregnancy',1],
 
-    ['HPC clusters',2],['SLURM',2],['GPU acceleration',2],['Benchmarking',2],
-    ['Python and R',2],['Java, SQL, MATLAB',2],['Hadoop',2],['The command line',2],
-    ['Git',2],['Workflow pipelines',2],['Cloud platforms',2],['Data visualization',2],
+    // 2 computing (21)
+    ['HPC clusters',2],['SLURM',2],['Linux',2],
+    ['Bash scripting',2],['The command line',2],['Parallel computing',2],
+    ['GPU acceleration',2],['Memory limits',2],['Benchmarking',2],
+    ['Containers',2],['Conda environments',2],['Workflow pipelines',2],
+    ['Jupyter notebooks',2],['Git',2],['Python and R',2],
+    ['Java, SQL, MATLAB',2],['Hadoop',2],['Cloud platforms',2],
+    ['Data visualization',2],['Machine learning',2],['AI',2],
 
-    ['Dynamical systems',3],['Chaos and the Lorenz system',3],['Reservoir computing',3],
-    ['Differential equations',3],['Linear algebra',3],['Optimization',3],
-    ['Numerical methods',3],['Markov chains',3],['Information theory',3],
-    ['Combinatorics',3],['Computational neuroscience',3],
+    // 3 math and modelling (17)
+    ['Probability theory',3],['Stochastic processes',3],['Markov chains',3],
+    ['Monte Carlo methods',3],['Linear algebra',3],['Differential equations',3],
+    ['Numerical methods',3],['Optimization',3],['Graph theory',3],
+    ['Combinatorics',3],['Information theory',3],['Dynamical systems',3],
+    ['Chaos and the Lorenz system',3],['Reservoir computing',3],['Neural networks',3],
+    ['Transformers',3],['Computational neuroscience',3],
 
-    ['Seoul',4],['Korean food',4],['Korean',4],['Military service',4],
-    ['Heavy vehicles',4],['Quant trading',4],['HPC consulting',4],
-    ['Website building',4],['Cooking',4],['Working out',4],['Coffee',4]
+    // 4 personal (14)
+    ['Seoul',4],['Seattle',4],['Korean',4],
+    ['Korean food',4],['Military service',4],
+    ['Quant trading',4],['HPC consulting',4],['Mentoring',4],
+    ['Hackathons',4],['Website building',4],['Cooking',4],
+    ['Working out',4],['Coffee',4]
   ];
 
   var LIGHT = ['#6B4A8F','#2F7A4E','#6B6B63','#A85434','#A8415E'];
@@ -71,20 +97,19 @@
   }
 
   var rand = mulberry32(SEED);
-  var RADIUS = 0.30;
 
   var pts = POINTS.map(function (p) {
     var x, y, z;
     do {                                   // rejection sample inside the ball
       x = rand() * 2 - 1; y = rand() * 2 - 1; z = rand() * 2 - 1;
     } while (x * x + y * y + z * z > 1);
-    var c = CENTRES[p[1]];
+    var c = CENTRES[p[1]], r = RADII[p[1]];
     return { label: p[0], c: p[1],
-             x: c[0] + x * RADIUS, y: c[1] + y * RADIUS, z: c[2] + z * RADIUS };
+             x: c[0] + x * r, y: c[1] + y * r, z: c[2] + z * r };
   });
 
   // One relaxation pass so no two points sit on top of each other.
-  var MIN = 0.10;
+  var MIN = 0.075;   // clusters are denser now; the old threshold fought the layout
   for (var a = 0; a < pts.length; a += 1) {
     for (var b = a + 1; b < pts.length; b += 1) {
       var dx = pts[b].x - pts[a].x, dy = pts[b].y - pts[a].y, dz = pts[b].z - pts[a].z;
@@ -107,8 +132,16 @@
   // box scales the whole drawing up at the same container width; sc then adds
   // a little more, bounded by how close the outermost point may come to an
   // edge before its label stops fitting.
-  var WIDE = { w: 560, h: 410, cx: 280, cy: 200, sc: 176 };
-  var NARROW = { w: 360, h: 420, cx: 180, cy: 205, sc: 124 };
+  // sc is bounded by how close the outermost point may come to an edge before
+  // its label stops fitting. The 93-point layout reaches further than the 58
+  // did, so this is lower than before while the cloud still lands larger on
+  // screen: a smaller scale over a wider spread.
+  // The cloud is not vertically symmetric: over a full rotation it reaches
+  // about 1.17 units above centre and only 0.92 below, so a frame centred on
+  // the midpoint leaves roughly three times the dead space underneath. Height
+  // and cy are set from those two bounds instead, giving equal margins.
+  var WIDE = { w: 560, h: 364, cx: 280, cy: 201, sc: 155 };
+  var NARROW = { w: 360, h: 296, cx: 180, cy: 163, sc: 124 };
   var view = WIDE;
 
   var coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
@@ -332,7 +365,7 @@
       var q = proj[j], node = nodes[j];
       node.dot.setAttribute('cx', q.sx.toFixed(2));
       node.dot.setAttribute('cy', q.sy.toFixed(2));
-      node.dot.setAttribute('r', (4.2 * q.k).toFixed(2));
+      node.dot.setAttribute('r', (3.4 * q.k).toFixed(2));
       node.dot.setAttribute('opacity', (0.5 + 0.5 * (q.d + 1) / 2).toFixed(3));
       node.hit.setAttribute('cx', q.sx.toFixed(2));
       node.hit.setAttribute('cy', q.sy.toFixed(2));
@@ -468,7 +501,7 @@
 
   /* Start ----------------------------------------------------------------- */
 
-  section.hidden = false;      // nothing above renders without JavaScript
+  // Visibility is CSS's job now, keyed on the `js` class: see style.css.
   view = window.innerWidth < 640 ? NARROW : WIDE;
   svg.setAttribute('viewBox', '0 0 ' + view.w + ' ' + view.h);
   measure();

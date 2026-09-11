@@ -68,8 +68,27 @@
       </div>
     </section>
 
+    <section class="latent" id="latent" aria-labelledby="latent-title">
+      <!-- Heading inside the panel, as the game card has it. The section is
+           gated on the `js` class in style.css, so without JavaScript neither
+           the heading nor the box appears. -->
+      <h2 class="section-title" id="latent-title">Latent Space</h2>
+      <div class="latent-canvas">
+        <svg class="cloud" id="cloud-svg" viewBox="0 0 660 410" role="img"
+             aria-labelledby="cloud-title" aria-describedby="cloud-desc">
+          <title id="cloud-title">Latent space</title>
+          <desc id="cloud-desc">A slowly turning three-dimensional scatter of fifty-eight
+            things I work on and think about, grouped into five clusters by subject.
+            Hover or tap a point to name it.</desc>
+          <g id="cloud-dots"></g>
+          <g id="cloud-labels"></g>
+          <g id="cloud-pick"></g>
+        </svg>
+      </div>
+    </section>
+
     <section class="game" id="game" aria-labelledby="game-title">
-      <h2 id="game-title">Can you beat a Markov chain?</h2>
+      <h2 class="section-title" id="game-title">Can you beat a Markov chain?</h2>
       <p>This bot has no strategy. It remembers your last two throws and plays whatever tends to beat you after that pattern.</p>
 
       <!-- Everything below stays hidden until game.js runs, so without JavaScript the block is just the heading and the description. -->
@@ -177,7 +196,7 @@
     </section>
 
     <section class="now" aria-labelledby="now-title">
-      <h2 id="now-title">Open Tabs <time class="updated" id="now-updated" datetime="2026-09">September 2026</time></h2>
+      <h2 class="section-title" id="now-title">Open Tabs <time class="updated" id="now-updated" datetime="2026-09">September 2026</time></h2>
       <!-- Replace the five list items below with real copy. Nothing else needs to change. -->
       <ul>
         <li>Building a GUI for the Bulk RNA-seq pipeline I wrote, so the rest of the lab can run it without touching a command line.</li>
@@ -185,24 +204,6 @@
         <li>Writing up a summer of research on uncertainty in single-cell cell-type annotation. I spent most of it building a fix, and the rest finding out it wasn't needed.</li>
         <li>Trying to lose fifteen pounds. They took two years to arrive and are in no hurry to leave.</li>
       </ul>
-    </section>
-
-    <section class="latent" id="latent" aria-labelledby="latent-title" hidden>
-      <h2 id="latent-title">Latent Space</h2>
-      <!-- The heading lives inside the block cloud.js reveals, so without
-           JavaScript there is no bare heading sitting above nothing. -->
-      <div class="latent-canvas">
-        <svg class="cloud" id="cloud-svg" viewBox="0 0 660 410" role="img"
-             aria-labelledby="cloud-title" aria-describedby="cloud-desc">
-          <title id="cloud-title">Latent space</title>
-          <desc id="cloud-desc">A slowly turning three-dimensional scatter of fifty-eight
-            things I work on and think about, grouped into five clusters by subject.
-            Hover or tap a point to name it.</desc>
-          <g id="cloud-dots"></g>
-          <g id="cloud-labels"></g>
-          <g id="cloud-pick"></g>
-        </svg>
-      </div>
     </section>
 
   </main>
