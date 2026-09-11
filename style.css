@@ -748,6 +748,75 @@ button {
   margin-bottom: 8px;
 }
 
+/* Latent space ------------------------------------------------------------ */
+
+.latent {
+  margin-top: var(--section);
+}
+
+/* A fixed box, so a tooltip appearing or a label changing never reflows the
+   page. The aspect ratio matches the viewBox at each breakpoint. */
+.latent-canvas {
+  margin-top: 16px;
+  aspect-ratio: 660 / 410;
+}
+
+.cloud {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  font-family: var(--font-sans);
+  /* pan-y rather than none: this block fills most of a phone screen, and with
+     none a vertical swipe over it rotates the cloud instead of scrolling, so a
+     visitor gets stuck. Vertical rotation on touch is the right thing to lose. */
+  touch-action: pan-y;
+}
+
+.cloud:active {
+  cursor: grabbing;
+}
+
+.cloud-dot {
+  pointer-events: none;
+}
+
+.cloud-hit {
+  fill: transparent;
+}
+
+.cloud-label {
+  font-size: 12px;
+  fill: var(--text-dim);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cloud-pick-box {
+  fill: var(--surface);
+  stroke: var(--border);
+  stroke-width: 0.5;
+}
+
+.cloud-pick-text {
+  font-size: 13.5px;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+@media (max-width: 639px) {
+  .latent-canvas {
+    aspect-ratio: 360 / 420;
+  }
+}
+
+/* Labels cross-fade; with motion reduced they appear and disappear at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .cloud-label {
+    transition: opacity 250ms ease;
+  }
+}
+
 /* Footer ------------------------------------------------------------------ */
 
 .footer {
