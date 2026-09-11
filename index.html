@@ -70,7 +70,7 @@
 
     <section class="game" id="game" aria-labelledby="game-title">
       <h2 id="game-title">Can you beat a Markov chain?</h2>
-      <p>This bot has no strategy. It remembers your last two throws and plays whatever tends to beat you after that pattern. Its entire model is on the table below, so you can beat it if you study it. Most people don't, and most people lose.</p>
+      <p>This bot has no strategy. It remembers your last two throws and plays whatever tends to beat you after that pattern.</p>
 
       <!-- Everything below stays hidden until game.js runs, so without JavaScript the block is just the heading and the description. -->
       <div class="game-ui" id="game-ui" hidden>
@@ -88,49 +88,78 @@
         <p class="demo-note" id="demo-note" hidden>Demo running. Press a button to play.</p>
 
 
-        <svg class="chain" viewBox="0 0 320 264" width="100%" role="img"
+        <svg class="chain" viewBox="0 0 300 200" width="100%" role="img"
              aria-labelledby="chain-title" aria-describedby="chain-desc">
           <title id="chain-title">The bot's model</title>
-          <desc id="chain-desc">A three by three grid of the nine two-throw states. No rounds played yet.</desc>
+          <desc id="chain-desc">Nine blocks, one per two-throw state. No rounds played yet.</desc>
           <defs>
-            <!-- userSpaceOnUse keeps the head a fixed size; the default scales it
-                 with stroke-width, which would balloon it on a heavily weighted
-                 edge. -->
             <marker id="chain-arrow" viewBox="0 0 8 8" refX="4" refY="4"
                     markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto">
               <path d="M0 0.5L7 4L0 7.5Z"/>
             </marker>
           </defs>
-          <!-- Edges sit behind the cells, so a line crossing a cell on its way
-               between distant rows is occluded rather than drawn over it. -->
+          <!-- Edges are painted behind the blocks: a line passing under a block
+               reads as depth, which is what you want in an isometric scene. -->
           <g id="chain-edges">
             <path class="chain-edge" id="edge-R" d="" marker-end="url(#chain-arrow)"/>
             <path class="chain-edge" id="edge-P" d="" marker-end="url(#chain-arrow)"/>
             <path class="chain-edge" id="edge-S" d="" marker-end="url(#chain-arrow)"/>
           </g>
-          <g id="chain-cells">
-          <rect class="chain-cell" id="cell-RR" x="8" y="8" width="88" height="56" rx="6"/>
-          <rect class="chain-cell" id="cell-RP" x="116" y="8" width="88" height="56" rx="6"/>
-          <rect class="chain-cell" id="cell-RS" x="224" y="8" width="88" height="56" rx="6"/>
-          <rect class="chain-cell" id="cell-PR" x="8" y="104" width="88" height="56" rx="6"/>
-          <rect class="chain-cell" id="cell-PP" x="116" y="104" width="88" height="56" rx="6"/>
-          <rect class="chain-cell" id="cell-PS" x="224" y="104" width="88" height="56" rx="6"/>
-          <rect class="chain-cell" id="cell-SR" x="8" y="200" width="88" height="56" rx="6"/>
-          <rect class="chain-cell" id="cell-SP" x="116" y="200" width="88" height="56" rx="6"/>
-          <rect class="chain-cell" id="cell-SS" x="224" y="200" width="88" height="56" rx="6"/>
+          <g class="chain-block" id="cell-RR">
+            <path class="face face-left" id="left-RR" d=""/>
+            <path class="face face-right" id="right-RR" d=""/>
+            <path class="face face-top" id="top-RR" d=""/>
+            <text class="chain-label" id="label-RR" x="150" y="56">RR</text>
           </g>
-          <g id="chain-labels">
-          <text class="chain-label" x="52" y="36">RR</text>
-          <text class="chain-label" x="160" y="36">RP</text>
-          <text class="chain-label" x="268" y="36">RS</text>
-          <text class="chain-label" x="52" y="132">PR</text>
-          <text class="chain-label" x="160" y="132">PP</text>
-          <text class="chain-label" x="268" y="132">PS</text>
-          <text class="chain-label" x="52" y="228">SR</text>
-          <text class="chain-label" x="160" y="228">SP</text>
-          <text class="chain-label" x="268" y="228">SS</text>
+          <g class="chain-block" id="cell-RP">
+            <path class="face face-left" id="left-RP" d=""/>
+            <path class="face face-right" id="right-RP" d=""/>
+            <path class="face face-top" id="top-RP" d=""/>
+            <text class="chain-label" id="label-RP" x="104" y="83">RP</text>
           </g>
-          <circle class="chain-marker" id="chain-marker" r="6" opacity="0"/>
+          <g class="chain-block" id="cell-PR">
+            <path class="face face-left" id="left-PR" d=""/>
+            <path class="face face-right" id="right-PR" d=""/>
+            <path class="face face-top" id="top-PR" d=""/>
+            <text class="chain-label" id="label-PR" x="196" y="83">PR</text>
+          </g>
+          <g class="chain-block" id="cell-RS">
+            <path class="face face-left" id="left-RS" d=""/>
+            <path class="face face-right" id="right-RS" d=""/>
+            <path class="face face-top" id="top-RS" d=""/>
+            <text class="chain-label" id="label-RS" x="58" y="110">RS</text>
+          </g>
+          <g class="chain-block" id="cell-PP">
+            <path class="face face-left" id="left-PP" d=""/>
+            <path class="face face-right" id="right-PP" d=""/>
+            <path class="face face-top" id="top-PP" d=""/>
+            <text class="chain-label" id="label-PP" x="150" y="110">PP</text>
+          </g>
+          <g class="chain-block" id="cell-SR">
+            <path class="face face-left" id="left-SR" d=""/>
+            <path class="face face-right" id="right-SR" d=""/>
+            <path class="face face-top" id="top-SR" d=""/>
+            <text class="chain-label" id="label-SR" x="242" y="110">SR</text>
+          </g>
+          <g class="chain-block" id="cell-PS">
+            <path class="face face-left" id="left-PS" d=""/>
+            <path class="face face-right" id="right-PS" d=""/>
+            <path class="face face-top" id="top-PS" d=""/>
+            <text class="chain-label" id="label-PS" x="104" y="137">PS</text>
+          </g>
+          <g class="chain-block" id="cell-SP">
+            <path class="face face-left" id="left-SP" d=""/>
+            <path class="face face-right" id="right-SP" d=""/>
+            <path class="face face-top" id="top-SP" d=""/>
+            <text class="chain-label" id="label-SP" x="196" y="137">SP</text>
+          </g>
+          <g class="chain-block" id="cell-SS">
+            <path class="face face-left" id="left-SS" d=""/>
+            <path class="face face-right" id="right-SS" d=""/>
+            <path class="face face-top" id="top-SS" d=""/>
+            <text class="chain-label" id="label-SS" x="150" y="164">SS</text>
+          </g>
+          <circle class="chain-marker" id="chain-marker" r="5.5" opacity="0"/>
         </svg>
 
         <dl class="game-stats">

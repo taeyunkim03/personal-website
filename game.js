@@ -165,14 +165,12 @@
    * That is why the marker only ever walks down a column and then along a row.
    */
 
-  var COL_X = [8, 116, 224];
-  var ROW_Y = [8, 104, 200];
-  var CELL_W = 88;
-  var CELL_H = 56;
+  var UX = 46;          // half-width of a block's top face
+  var UY = 27;          // screen step per grid position, toward the viewer
+  var TOP = 23;         // half-height of the top face
+  var BASE_X = 150;
+  var BASE_Y = 56;
 
-  // var() references, not resolved hex: the browser resolves them against the
-  // active theme, so toggling light/dark recolours every cell instantly
-  // without another render.
   var FILL_STOPS = [
     [0, 'var(--grid-0)'],
     [1, 'var(--grid-1)'],
@@ -181,27 +179,27 @@
     [11, 'var(--grid-4)']
   ];
 
+  // Height encodes the same count the fill does, so the silhouette shows the
+  // player's bias at a glance. It must stay under UY: a taller block in front
+  // would rise into the top face of the one behind it, and the whole point of
+  // a single layer is that nothing can hide anything.
+  var HEIGHTS = [3, 8, 13, 18, 23];
+
   var chainEl = document.querySelector('.chain');
   var descEl = document.getElementById('chain-desc');
   var markerEl = document.getElementById('chain-marker');
 
-  // The brief puts both the label and the marker at the cell centre, where they
-  // sit on top of each other and the state text becomes unreadable. The label
-  // keeps the centre, since it is the thing you need to read; the marker sits
-  // left of it, still inside the cell and still hopping between cells.
-  var MARKER_DX = 18;
+  // The label sits at the centre of the top face, so the marker sits beside it.
+  var MARKER_DX = 25;
 
   function idx(throwLetter) { return THROWS.indexOf(throwLetter); }
-  function centreX(col) { return COL_X[col] + CELL_W / 2; }
-  function centreY(row) { return ROW_Y[row] + CELL_H / 2; }
-  function markerX(col) { return COL_X[col] + MARKER_DX; }
 
-  function fillFor(total) {
-    var fill = FILL_STOPS[0][1];
+  function bandOf(total) {
+    var b = 0;
     for (var i = 0; i < FILL_STOPS.length; i += 1) {
-      if (total >= FILL_STOPS[i][0]) { fill = FILL_STOPS[i][1]; }
+      if (total >= FILL_STOPS[i][0]) { b = i; }
     }
-    return fill;
+    return b;
   }
 
   function totalFor(state) {
@@ -209,44 +207,47 @@
     return c ? c.R + c.P + c.S : 0;
   }
 
-  // A straight drop or climb between two different rows. Edges are painted
-  // under the cells, so the rare line that clips a cell between distant rows is
-  // hidden by it rather than drawn across it.
-  function straightEdge(srcCol, srcRow, dstCol, dstRow) {
-    var x1 = centreX(srcCol);
-    var x2 = centreX(dstCol);
-    var down = dstRow > srcRow;
-    var y1 = down ? ROW_Y[srcRow] + CELL_H : ROW_Y[srcRow];
-    var y2 = down ? ROW_Y[dstRow] - 6 : ROW_Y[dstRow] + CELL_H + 6;
-    return 'M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2;
+  // Where a state's top face sits: its footprint is fixed, its height is not.
+  function topOf(state) {
+    var i = idx(state.charAt(0));   // older throw picks the row
+    var k = idx(state.charAt(1));   // newer throw picks the column
+    var h = HEIGHTS[bandOf(totalFor(state))];
+    return { x: BASE_X + (i - k) * UX, y: BASE_Y + (i + k) * UY - h, h: h };
   }
 
-  // Successors share the current row when the two throws are equal. Drawing
-  // those straight would run the line through whatever cell sits between, so
-  // they detour into the gap band instead, one lane per throw.
-  function sameRowEdge(srcCol, dstCol, row, lane) {
-    var below = row < 2;
-    var edgeY = below ? ROW_Y[row] + CELL_H : ROW_Y[row];
-    var laneY = below ? edgeY + lane : edgeY - lane;
-    var stopY = below ? edgeY + 6 : edgeY - 6;
+  function faces(t) {
+    var x = t.x, y = t.y, h = t.h;
+    return {
+      top: 'M' + x + ' ' + (y - TOP) + 'L' + (x + UX) + ' ' + y +
+           'L' + x + ' ' + (y + TOP) + 'L' + (x - UX) + ' ' + y + 'Z',
+      left: 'M' + (x - UX) + ' ' + y + 'L' + x + ' ' + (y + TOP) +
+            'L' + x + ' ' + (y + TOP + h) + 'L' + (x - UX) + ' ' + (y + h) + 'Z',
+      right: 'M' + (x + UX) + ' ' + y + 'L' + x + ' ' + (y + TOP) +
+             'L' + x + ' ' + (y + TOP + h) + 'L' + (x + UX) + ' ' + (y + h) + 'Z'
+    };
+  }
 
-    // Landing back on the same cell: a small U, so it reads as "stays put".
-    if (srcCol === dstCol) {
-      var cx = centreX(srcCol);
-      return 'M' + (cx - 12) + ' ' + edgeY +
-             'L' + (cx - 12) + ' ' + laneY +
-             'L' + (cx + 12) + ' ' + laneY +
-             'L' + (cx + 12) + ' ' + stopY;
-    }
-    return 'M' + centreX(srcCol) + ' ' + edgeY +
-           'L' + centreX(srcCol) + ' ' + laneY +
-           'L' + centreX(dstCol) + ' ' + laneY +
-           'L' + centreX(dstCol) + ' ' + stopY;
+  // Stop the line where it meets the target's top face rather than a fixed
+  // distance short, so the arrowhead lands on the edge of the block whatever
+  // direction it arrives from. The face is a rhombus: |dx|/UX + |dy|/TOP = 1.
+  function edgeTo(from, to) {
+    var dx = from.x - to.x, dy = from.y - to.y;
+    var len = Math.sqrt(dx * dx + dy * dy);
+    if (len < 1) { return null; }
+    var s = 1 / (Math.abs(dx) / UX + Math.abs(dy) / TOP) + 6 / len;
+    return 'M' + from.x + ' ' + from.y + 'L' + (to.x + dx * s) + ' ' + (to.y + dy * s);
+  }
+
+  // Landing back on the same state: a small loop over the block, since a line
+  // from a point to itself has nothing to draw.
+  function selfLoop(t) {
+    return 'M' + (t.x - 11) + ' ' + (t.y - 9) +
+           'A 13 13 0 1 1 ' + (t.x + 11) + ' ' + (t.y - 9);
   }
 
   function describe(state, total) {
     if (state === null) {
-      return 'A three by three grid of the nine two-throw states. ' +
+      return 'Nine blocks, one per two-throw state. ' +
              'The bot needs two throws before it has a state.';
     }
     if (total === 0) {
@@ -262,14 +263,13 @@
 
   // Everything painted here is written as an inline style, never as an SVG
   // presentation attribute. A stylesheet rule outranks a presentation
-  // attribute, so `setAttribute('fill', ...)` against a CSS `.chain-cell { fill }`
-  // is silently discarded and every cell keeps the base colour.
+  // attribute, so `setAttribute('fill', ...)` against a CSS `.face { fill }`
+  // is silently discarded and every block keeps the base colour.
   function renderChain() {
     if (!chainEl) { return; }
 
     var state = stateOf(active);
 
-    // Fills, plus the ring on the current cell and the fading trail behind it.
     var trail = [];
     var visited = active.visited;
     for (var v = visited.length - 1; v >= 0 && trail.length < 3; v -= 1) {
@@ -279,31 +279,47 @@
     for (var r = 0; r < 3; r += 1) {
       for (var c = 0; c < 3; c += 1) {
         var name = THROWS[r] + THROWS[c];
-        var cell = document.getElementById('cell-' + name);
-        if (!cell) { continue; }
-        cell.style.fill = fillFor(totalFor(name));
-        cell.setAttribute('class',
-          'chain-cell' + (name === state ? ' is-current' : (trail.indexOf(name) !== -1 ? ' is-trail' : '')));
+        var block = document.getElementById('cell-' + name);
+        if (!block) { continue; }
+
+        var t = topOf(name);
+        var f = faces(t);
+        var token = FILL_STOPS[bandOf(totalFor(name))][1];
+
+        var topEl = document.getElementById('top-' + name);
+        var leftEl = document.getElementById('left-' + name);
+        var rightEl = document.getElementById('right-' + name);
+        topEl.style.d = 'path("' + f.top + '")';
+        leftEl.style.d = 'path("' + f.left + '")';
+        rightEl.style.d = 'path("' + f.right + '")';
+        topEl.setAttribute('d', f.top);
+        leftEl.setAttribute('d', f.left);
+        rightEl.setAttribute('d', f.right);
+
+        // The two lit sides are the same colour stepped down, so the shading
+        // costs no extra tokens and follows the theme automatically.
+        topEl.style.fill = token;
+        leftEl.style.fill = 'color-mix(in srgb, ' + token + ' 80%, #000)';
+        rightEl.style.fill = 'color-mix(in srgb, ' + token + ' 64%, #000)';
+
+        document.getElementById('label-' + name).setAttribute('y', String(t.y));
+        block.setAttribute('class',
+          'chain-block' + (name === state ? ' is-current' : (trail.indexOf(name) !== -1 ? ' is-trail' : '')));
       }
     }
 
-    // Only the three edges leaving the current state are ever drawn.
     var total = state === null ? 0 : totalFor(state);
-    for (var t = 0; t < 3; t += 1) {
-      var edge = document.getElementById('edge-' + THROWS[t]);
+    var from = state === null ? null : topOf(state);
+    for (var e = 0; e < 3; e += 1) {
+      var edge = document.getElementById('edge-' + THROWS[e]);
       if (!edge) { continue; }
       if (state === null) {
         edge.style.opacity = '0';
         continue;
       }
-      var srcRow = idx(state.charAt(0));
-      var srcCol = idx(state.charAt(1));
-      var dstRow = srcCol;            // the column you are in is the row you move to
-      var dstCol = t;
-
-      edge.setAttribute('d', srcRow === dstRow
-        ? sameRowEdge(srcCol, dstCol, srcRow, 12 + t * 10)
-        : straightEdge(srcCol, srcRow, dstCol, dstRow));
+      var dst = state.charAt(1) + THROWS[e];
+      var path = dst === state ? selfLoop(from) : edgeTo(from, topOf(dst));
+      edge.setAttribute('d', path || '');
       edge.style.opacity = '1';
 
       if (total === 0) {
@@ -311,7 +327,7 @@
         edge.style.strokeWidth = '1';
         edge.style.strokeDasharray = '3 3';
       } else {
-        edge.style.strokeWidth = String(1 + 4 * (active.counts[state][THROWS[t]] / total));
+        edge.style.strokeWidth = String(1 + 4 * (active.counts[state][THROWS[e]] / total));
         edge.style.strokeDasharray = '';
       }
     }
@@ -320,15 +336,14 @@
       if (state === null) {
         markerEl.style.opacity = '0';
       } else {
-        var target =
-          'translate(' + markerX(idx(state.charAt(1))) + 'px, ' + centreY(idx(state.charAt(0))) + 'px)';
+        var m = topOf(state);
+        var target = 'translate(' + (m.x - MARKER_DX) + 'px, ' + m.y + 'px)';
         if (markerEl.style.opacity !== '1') {
-          // First appearance: place it, then fade it in. Without this the
-          // transform transitions from its initial identity, so the marker
-          // visibly flies in from the SVG's top-left corner.
+          // First appearance: place it, then fade in. Otherwise the transform
+          // transitions from identity and the marker flies in from the corner.
           markerEl.style.transition = 'none';
           markerEl.style.transform = target;
-          void markerEl.getBoundingClientRect(); // commit the jump
+          void markerEl.getBoundingClientRect();
           markerEl.style.transition = '';
         } else {
           markerEl.style.transform = target;
@@ -337,7 +352,6 @@
       }
     }
 
-    // The result line is already a live region; this one is read on demand.
     if (descEl) { descEl.textContent = describe(state, total); }
   }
 

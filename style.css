@@ -630,8 +630,13 @@ button {
 
 /* Markov chain grid ------------------------------------------------------- */
 
-/* The nine two-throw states. Row is the older throw, column the newer one, so
-   the column you are in is always the row you move to next.
+/* Nine two-throw states drawn as isometric blocks. Row is the older throw,
+   column the newer one, so the column you are in is always the row you move to.
+
+   Block height encodes how often you have landed in that state, which is the
+   same number the fill ramp carries: the silhouette shows your bias before you
+   read a single label. A single layer has no interior, so unlike a 3x3x3 cube
+   no block can ever hide another one's top face.
 
    Colours come from the --grid-* tokens. game.js writes fills as var()
    references, so toggling the theme recolours the whole grid live, mid-game,
@@ -653,20 +658,21 @@ button {
   margin: 12px auto 0;
 }
 
-.chain-cell {
-  fill: var(--grid-0);
+.face {
   stroke: var(--border);
-  stroke-width: 0.5;
+  stroke-width: 0.7;
+  stroke-linejoin: round;
 }
 
-/* Visited recently, but not where the marker is now. */
-.chain-cell.is-trail {
+/* Visited recently, but not where the marker is now. Only the top face is
+   outlined: stroking all three would put three times the red on screen that
+   the flat grid used to, and it would compete with the current state. */
+.chain-block.is-trail .face-top {
   stroke: var(--grid-live);
-  stroke-width: 0.5;
   stroke-opacity: 0.4;
 }
 
-.chain-cell.is-current {
+.chain-block.is-current .face {
   stroke: var(--grid-live);
   stroke-width: 2;
   stroke-opacity: 1;
@@ -697,10 +703,14 @@ button {
   fill: var(--grid-live);
 }
 
-/* Motion is opt-out: with reduced motion the grid still updates, instantly. */
+/* Motion is opt-out: with reduced motion the grid still updates, instantly.
+   `d` is animatable in current browsers and is what makes a block grow rather
+   than jump when it crosses a band; where it is not supported the height
+   simply snaps while the fill still fades. */
 @media (prefers-reduced-motion: no-preference) {
-  .chain-cell {
-    transition: fill 400ms ease, stroke 200ms ease, stroke-width 200ms ease, stroke-opacity 200ms ease;
+  .face {
+    transition: fill 400ms ease, d 400ms ease, stroke 200ms ease,
+                stroke-width 200ms ease, stroke-opacity 200ms ease;
   }
 
   .chain-edge {
