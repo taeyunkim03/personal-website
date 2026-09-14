@@ -425,10 +425,19 @@ button {
 }
 
 .intro-text p {
-  margin: 16px auto 24px;
+  margin: 16px auto 0;
   font-family: var(--font-serif);
   font-size: 1.25rem;
   line-height: 1.45;
+}
+
+/* Two classes deep so it outranks `.intro-text p`, and both margins are set:
+   adjacent vertical margins collapse to the larger one, so a 12px top alone
+   would lose to whatever the paragraph above declares. Same face and size as
+   the paragraph above it, since it is the same voice rather than a caption. */
+.intro-text .intro-line {
+  margin-top: 12px;
+  margin-bottom: 24px;
 }
 
 /* Intro line reveal ------------------------------------------------------- */
