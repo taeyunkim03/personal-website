@@ -15,7 +15,7 @@
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -43,67 +43,87 @@
 
   <main id="main" class="wrap">
 
-    <!-- When assets/resume.pdf exists, uncomment this download link. -->
+    <!-- Uncomment once assets/resume.pdf exists. -->
     <!-- <p class="cv-download"><a href="/assets/resume.pdf" download>Download as PDF</a></p> -->
 
     <article class="cv-panel">
-      <header>
+      <header class="cv-header">
         <h1>Taeyun Kim</h1>
-        <p class="cv-lead">Statistics and data science, University of Washington. Seattle, WA.</p>
-        <p class="cv-lead"><a href="mailto:taeyun.kim03@outlook.com">taeyun.kim03@outlook.com</a></p>
+        <p class="cv-contact">
+          <a href="mailto:taeyun.kim03@outlook.com">Email</a>
+          <a href="https://www.linkedin.com/in/taeyun-kim" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/taeyunkim03" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://orcid.org/0009-0009-3051-6597" target="_blank" rel="noopener">ORCID</a>
+        </p>
       </header>
 
       <section class="cv-section" aria-labelledby="cv-education">
         <h2 id="cv-education">Education</h2>
         <div class="cv-row">
-          <div class="cv-date">Sep 2021 to Jun 2027</div>
+          <p class="cv-date">Sep 2021 – Jun 2027</p>
           <div class="cv-entry">
-            <p><span class="cv-role">University of Washington</span>, Seattle, WA</p>
-            <p>Bachelor of Science, Statistics - Data Science. Minor in Applied Mathematics.</p>
-            <p>GPA 3.75 / 4.0. Annual Dean's List, 2024 to 2025.</p>
-            <p>Relevant coursework: data structures and algorithms, statistical machine learning, probability and statistics, mathematical modeling.</p>
+            <p class="cv-title">University of Washington, Seattle, WA</p>
+            <p>Bachelor of Science, Statistics - Data Science</p>
+            <p>Minor in Applied Mathematics</p>
+            <p><span class="cv-dim">GPA 3.75 / 4.0. Annual Dean’s List, 2024–2025.</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Jul 2026</p>
+          <div class="cv-entry">
+            <p class="cv-title">AI in Practice Summer Institute</p>
+            <p class="cv-org">UW eScience Institute</p>
+            <p>Foundation models, scaling, and the training and evaluation of deep networks for vision and language.</p>
           </div>
         </div>
       </section>
 
       <section class="cv-section" aria-labelledby="cv-research">
-        <h2 id="cv-research">Research experience</h2>
-
+        <h2 id="cv-research">Research Experience</h2>
         <div class="cv-row">
-          <div class="cv-date">Sep 2025 to present</div>
+          <p class="cv-date">Sep 2025 – Present</p>
           <div class="cv-entry">
-            <p><span class="cv-role">Bioinformatics and Data Science Research Assistant</span></p>
-            <p>UW Medicine, Department of Obstetrics and Gynecology, Adams Waldorf Lab</p>
+            <p class="cv-title">Bioinformatics and Data Science Research Assistant</p>
+            <p class="cv-org">UW Medicine, Department of Obstetrics and Gynecology, Adams Waldorf Lab</p>
             <ul>
-              <li>Developed a GPU-accelerated single-cell RNA sequencing pipeline with CellBender, RAPIDS and scVI/scANVI, cutting runtime fifteenfold over the CPU version while preserving annotation quality.</li>
-              <li>Applied deep generative models, dimensionality reduction and unsupervised clustering to high-dimensional datasets spanning tens of thousands of observations.</li>
-              <li>Wrote Python workflows for quality control, doublet detection, batch integration, clustering and cross-species label transfer aligning macaque cell types to human reference atlases.</li>
-              <li>Runs analysis jobs and manages data on Linux HPC clusters, Hyak and Tillicum, with SLURM scheduling and GPU resources.</li>
+              <li>Led the performance optimization of a high-throughput single-cell RNA-seq pipeline, migrating it from CPU to GPU with CellBender, RAPIDS and scVI/scANVI, and cutting runtime fifteenfold while preserving annotation quality.</li>
+              <li>Applied deep generative models, dimensionality reduction and unsupervised clustering to high-dimensional datasets spanning tens of thousands of cells.</li>
+              <li>Built Python workflows for quality control, doublet detection, batch integration, clustering and cross-species label transfer against human reference atlases.</li>
+              <li>Authored the lab’s bioinformatics standard operating procedures and an onboarding tutorial now used to train incoming researchers.</li>
             </ul>
           </div>
         </div>
-
         <div class="cv-row">
-          <div class="cv-date">Apr 2026 to Jun 2026</div>
+          <p class="cv-date">Apr 2026 – Jun 2026</p>
           <div class="cv-entry">
-            <p><span class="cv-role">Neuroscience Undergraduate Reading Program</span></p>
-            <p>NURP at UW</p>
+            <p class="cv-title">Neuroscience Undergraduate Reading Program</p>
+            <p class="cv-org">NURP at UW</p>
             <ul>
-              <li>Reviewed four research papers spanning single-photon biophysics, probabilistic spiking models, population decoding and deep network models of the retina.</li>
+              <li>Reviewed four papers spanning single-photon biophysics, probabilistic spiking models, population decoding and deep network models of the retina.</li>
               <li>Built a stochastic leaky integrate-and-fire neuron model in Python and fit it to primate retinal ganglion cell recordings.</li>
               <li>Recovered the temporal receptive field by maximum likelihood, matching the spike-triggered average at r = 0.80.</li>
             </ul>
           </div>
         </div>
-
         <div class="cv-row">
-          <div class="cv-date">Jan 2026 to Mar 2026</div>
+          <p class="cv-date">Apr 2026 – Jun 2026</p>
           <div class="cv-entry">
-            <p><span class="cv-role">Statistics Directed Reading Program</span></p>
-            <p>Statistics Peer Advisors at UW</p>
+            <p class="cv-title">NeuroAI Technical Track</p>
+            <p class="cv-org">Interactive Intelligence at UW</p>
             <ul>
-              <li>Worked through a reading list on the statistical foundations of machine translation and large language models in weekly one-on-one meetings with a graduate student mentor.</li>
-              <li>Covered n-gram models, maximum likelihood estimation, word embeddings and transformer architecture, then built a sequence-to-sequence translation model in Python.</li>
+              <li>Completed i2’s NeuroAI technical track, covering backpropagation, convolutional networks, reinforcement learning and neuroanatomy.</li>
+              <li>Worked through the accompanying notebooks and reading, implementing the core algorithms rather than only studying them.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Jan 2026 – Mar 2026</p>
+          <div class="cv-entry">
+            <p class="cv-title">Statistics Directed Reading Program</p>
+            <p class="cv-org">Department of Statistics at UW</p>
+            <ul>
+              <li>Worked through the statistical foundations of machine translation and large language models with a graduate mentor, covering n-gram models, maximum likelihood estimation, word embeddings and the transformer architecture.</li>
+              <li>Built a sequence-to-sequence translation model in Python and presented the findings to an academic audience.</li>
             </ul>
           </div>
         </div>
@@ -112,45 +132,60 @@
       <section class="cv-section" aria-labelledby="cv-publications">
         <h2 id="cv-publications">Publications</h2>
         <div class="cv-row">
-          <div class="cv-date">2026</div>
+          <p class="cv-date">Aug 2026</p>
           <div class="cv-entry">
-            <p>Cornelius JA, Shivakumar M, <span class="cv-role">Kim T</span>, et al., Adams Waldorf KM. A single-cell transcriptomic atlas of the periventricular proliferative zone in the late gestation fetal brain in the pigtail macaque. <i>Frontiers in Neuroscience</i>, 20:1785001 (2026). <a href="https://doi.org/10.3389/fnins.2026.1785001">doi:10.3389/fnins.2026.1785001</a></p>
+            <p>Cornelius JA, Shivakumar M, <b class="cv-me">Kim T</b>, et al., Adams Waldorf KM. A single-cell transcriptomic atlas of the periventricular proliferative zone in the late gestation fetal brain in the pigtail macaque. <i>Frontiers in Neuroscience</i>, 20:1785001. <a class="cv-doi" href="https://doi.org/10.3389/fnins.2026.1785001">doi.org/10.3389/fnins.2026.1785001</a></p>
           </div>
         </div>
       </section>
 
       <section class="cv-section" aria-labelledby="cv-leadership">
-        <h2 id="cv-leadership">Leadership and service</h2>
-
+        <h2 id="cv-leadership">Leadership and Service</h2>
         <div class="cv-row">
-          <div class="cv-date">Dec 2025 to present</div>
+          <p class="cv-date">Dec 2025 – Present</p>
           <div class="cv-entry">
-            <p><span class="cv-role">Officer</span>, Research Computing Club at UW</p>
-            <p>Manages student and faculty access to UW's Hyak and Tillicum HPC clusters and cloud computing credits. Coordinates with campus partners on training sessions and user support for HPC and cloud platforms.</p>
+            <p class="cv-title">Research Computing Club Officer</p>
+            <p class="cv-org">UW eScience Institute</p>
+            <ul>
+              <li>Run office hours resolving HPC and cloud platform issues for more than ten student and faculty researchers.</li>
+              <li>Administer access to UW’s Hyak and Tillicum clusters and cloud computing credits, and coordinate with campus partners and IBM on training sessions.</li>
+            </ul>
           </div>
         </div>
-
         <div class="cv-row">
-          <div class="cv-date">Jun 2025 to Jun 2026</div>
+          <p class="cv-date">Jun 2025 – Jun 2026</p>
           <div class="cv-entry">
-            <p><span class="cv-role">Public Relations and Development Team Leader</span>, KoJobs-UW</p>
-            <p>Led a six-person team, managing project planning, task delegation and timelines. Coordinated with industry professionals and internal stakeholders to run career guidance and counseling sessions for students. Oversaw development and maintenance of the organization's website and set its UI standards.</p>
+            <p class="cv-title">Public Relations and Development Team Leader</p>
+            <p class="cv-org">KoJobs UW</p>
+            <ul>
+              <li>Secured five corporate and institutional partnerships, including HiteJinro, H-Mart, Changbal and the Seattle Office of Korean Education.</li>
+              <li>Organized four career guidance sessions delivered to over 250 members.</li>
+              <li>Led a six-person team across project planning, task delegation and delivery timelines.</li>
+              <li>Improved the site’s UI and user experience, setting the organization’s UI standards.</li>
+            </ul>
           </div>
         </div>
-
         <div class="cv-row">
-          <div class="cv-date">Sep 2024 to May 2025</div>
+          <p class="cv-date">Sep 2024 – May 2025</p>
           <div class="cv-entry">
-            <p><span class="cv-role">Public Relations and Development Team Officer</span>, KoJobs-UW</p>
-            <p>Built and maintained the organization's website. Helped organize career guidance sessions with professionals across a range of industries.</p>
+            <p class="cv-title">Public Relations and Development Team Officer</p>
+            <p class="cv-org">KoJobs UW</p>
+            <ul>
+              <li>Built the organization’s official website from the ground up, establishing its structure and design.</li>
+              <li>Worked with the team to organize career guidance sessions with professionals across a range of industries.</li>
+            </ul>
           </div>
         </div>
-
         <div class="cv-row">
-          <div class="cv-date">Dec 2022 to Jun 2024</div>
+          <p class="cv-date">Dec 2022 – Jun 2024</p>
           <div class="cv-entry">
-            <p><span class="cv-role">Republic of Korea Army</span></p>
-            <p>Heavy vehicle operator in a CBRN battalion. Discharged at the rank of sergeant. Led a team of eight in training exercises and built a data visualization system and written work instructions that shortened the training period.</p>
+            <p class="cv-title">Sergeant, Heavy Vehicle Operator</p>
+            <p class="cv-org">Republic of Korea Army, CBRN Battalion</p>
+            <ul>
+              <li>Built a structured data visualization system tracking maintenance status across the battalion’s heavy vehicle fleet, improving deployment decisions and unit readiness.</li>
+              <li>Led a team of eight soldiers through training programs, raising unit readiness by 24 percent in quarterly evaluation.</li>
+              <li>Authored and maintained standardized work instructions that reduced training time by 30 percent.</li>
+            </ul>
           </div>
         </div>
       </section>
@@ -158,54 +193,140 @@
       <section class="cv-section" aria-labelledby="cv-awards">
         <h2 id="cv-awards">Awards</h2>
         <div class="cv-row">
-          <div class="cv-date">2026</div>
+          <p class="cv-date">Jun 2026</p>
           <div class="cv-entry">
             <p>Best Innovation Award, Changbal Innovation Hackathon</p>
           </div>
         </div>
         <div class="cv-row">
-          <div class="cv-date">2024 to 2025</div>
+          <p class="cv-date">2024–2025</p>
           <div class="cv-entry">
-            <p>Annual Dean's List, University of Washington</p>
+            <p>Annual Dean’s List, University of Washington</p>
           </div>
         </div>
       </section>
 
       <section class="cv-section" aria-labelledby="cv-certifications">
         <h2 id="cv-certifications">Certifications</h2>
-        <ul class="cv-list">
-          <li>Microsoft Azure Data Fundamentals (DP-900)</li>
-          <li>Microsoft Azure AI Fundamentals (AI-900)</li>
-          <li>SQL Developer (SQLD)</li>
-          <li>Advanced Data Analytics Semi-Professional (ADsP)</li>
-          <li>Advanced Statistics for Data Science, Johns Hopkins University via Coursera</li>
-          <li>Google AI Professional Certificate</li>
-          <li>Biostatistics in Public Health</li>
-          <li>Bloomberg Market Concepts</li>
-        </ul>
+        <div class="cv-row">
+          <p class="cv-date">Aug 2026</p>
+          <div class="cv-entry">
+            <p>Biostatistics in Public Health <span class="cv-dim">· Johns Hopkins University</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Aug 2026</p>
+          <div class="cv-entry">
+            <p>Advanced Statistics for Data Science <span class="cv-dim">· Johns Hopkins University</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Aug 2026</p>
+          <div class="cv-entry">
+            <p>Google AI Professional Certificate <span class="cv-dim">· Google</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Aug 2026</p>
+          <div class="cv-entry">
+            <p>Bloomberg Market Concepts <span class="cv-dim">· Bloomberg</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Aug 2025</p>
+          <div class="cv-entry">
+            <p>Azure AI Fundamentals (AI-900) <span class="cv-dim">· Microsoft</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Aug 2025</p>
+          <div class="cv-entry">
+            <p>Azure Data Fundamentals (DP-900) <span class="cv-dim">· Microsoft</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Sep 2024</p>
+          <div class="cv-entry">
+            <p>SQL Developer (SQLD) <span class="cv-dim">· Korea Data Agency</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Jun 2024</p>
+          <div class="cv-entry">
+            <p>Advanced Data Analytics Semi-Professional (ADsP) <span class="cv-dim">· Korea Data Agency</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Jun 2020</p>
+          <div class="cv-entry">
+            <p>Python Basics for Data Science <span class="cv-dim">· IBM</span></p>
+          </div>
+        </div>
       </section>
 
       <section class="cv-section" aria-labelledby="cv-skills">
         <h2 id="cv-skills">Skills</h2>
         <div class="cv-row">
-          <div class="cv-date">Languages</div>
-          <div class="cv-entry"><p>Python, R, SQL, Java, JavaScript</p></div>
+          <p class="cv-date">Programming languages</p>
+          <div class="cv-entry">
+            <p>Python, R, SQL, Java, MATLAB, JavaScript, HTML/CSS</p>
+          </div>
         </div>
         <div class="cv-row">
-          <div class="cv-date">Tools and methods</div>
-          <div class="cv-entry"><p>scVI, scANVI, CellBender, RAPIDS, Scanpy, SLURM, Linux HPC, Git</p></div>
+          <p class="cv-date">Libraries</p>
+          <div class="cv-entry">
+            <p>NumPy, pandas, SciPy, scikit-learn, PyTorch, TensorFlow, XGBoost, Hugging Face Transformers, statsmodels, Matplotlib, seaborn, ggplot2, D3, Scanpy, scVI, scANVI, CellBender, Harmony, RAPIDS</p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Tools and platforms</p>
+          <div class="cv-entry">
+            <p>Linux, Bash, Git, GitHub, Docker, Conda, Azure, Hadoop, Tableau, Power BI, Overleaf, Nextflow, SLURM, HPC clusters, STARsolo, CellRanger, Partek, BLAST</p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Methods</p>
+          <div class="cv-entry">
+            <p>Single-cell and bulk RNA-seq analysis, batch integration, differential expression, generalized linear models, Bayesian inference, conformal prediction, hypothesis testing, experimental design</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-coursework">
+        <h2 id="cv-coursework">Selected Coursework</h2>
+        <div class="cv-row">
+          <p class="cv-date">Statistics</p>
+          <div class="cv-entry">
+            <p>Statistical Machine Learning, Generalized Linear Models, Applied Regression and ANOVA, Probability and Mathematical Statistics I–III, Statistical Computing, Elements of Statistical Methods</p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Mathematics</p>
+          <div class="cv-entry">
+            <p>Advanced Multivariable Calculus, Matrix Algebra, Differential Equations, Mathematical Reasoning, Continuous Mathematical Modeling, Scientific Computing</p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Computing</p>
+          <div class="cv-entry">
+            <p>Data Structures and Algorithms, Database Systems, Data Visualization, Intermediate Data Programming, Software Documentation</p>
+          </div>
         </div>
       </section>
 
       <section class="cv-section" aria-labelledby="cv-languages">
-        <h2 id="cv-languages">Languages</h2>
+        <h2 id="cv-languages">Spoken Languages</h2>
         <div class="cv-row">
-          <div class="cv-date">Korean</div>
-          <div class="cv-entry"><p>Native</p></div>
+          <p class="cv-date">Korean</p>
+          <div class="cv-entry">
+            <p>Native</p>
+          </div>
         </div>
         <div class="cv-row">
-          <div class="cv-date">English</div>
-          <div class="cv-entry"><p>Professional working proficiency</p></div>
+          <p class="cv-date">English</p>
+          <div class="cv-entry">
+            <p>Full professional proficiency</p>
+          </div>
         </div>
       </section>
     </article>

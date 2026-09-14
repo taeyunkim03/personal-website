@@ -897,47 +897,62 @@ button {
 
 /* CV ---------------------------------------------------------------------- */
 
+/* Every colour here is a token, so the page follows the theme without a second
+   palette. The panel sits on --surface in both themes: in dark it reads as a
+   lifted document rather than flipping to a white sheet. */
+
 .cv-download {
   margin-top: 16px;
+  font-size: 14px;
 }
 
 .cv-panel {
-  margin-top: 32px;
-  padding: 32px 24px;
+  margin-top: 24px;
+  padding: 32px 28px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 4px;
 }
 
-.cv-panel h1 {
-  font-size: 1.75rem;
+.cv-header h1 {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
-.cv-lead {
-  margin-top: 4px;
-  color: var(--text-dim);
-}
-
-.cv-lead + .cv-lead {
-  margin-top: 0;
+/* Fixed whitespace between the links rather than punctuation, and it wraps
+   rather than overflowing on a narrow screen. */
+.cv-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin: 10px 0 0;
+  max-width: none;
+  font-size: 14px;
 }
 
 .cv-section {
-  margin-top: 40px;
+  margin-top: 36px;
 }
 
 .cv-section h2 {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   padding-bottom: 8px;
-  font-size: 1rem;
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.3;
   border-bottom: 1px solid var(--border);
 }
 
+/* One grid for every section body. Single column first, so on a narrow screen
+   the date sits above its entry. */
 .cv-row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2px 24px;
-  margin-bottom: 24px;
+  gap: 2px 22px;
+  margin-bottom: 18px;
 }
 
 .cv-row:last-child {
@@ -945,42 +960,62 @@ button {
 }
 
 .cv-date {
-  font-size: 0.8125rem;
+  margin: 0;
+  padding-top: 4px;
+  max-width: none;
+  font-size: 13px;
+  line-height: 1.65;
   color: var(--text-dim);
 }
 
-.cv-role {
+.cv-entry p {
+  margin: 0 0 4px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.cv-entry p:last-child {
+  margin-bottom: 0;
+}
+
+/* Two classes deep on purpose: `.cv-entry p` would otherwise outrank a bare
+   class selector and these would never take effect. */
+.cv-entry .cv-title {
+  font-size: 15px;
   font-weight: 500;
 }
 
-.cv-entry p {
-  margin-bottom: 4px;
+.cv-entry .cv-org {
+  color: var(--text-dim);
 }
 
-/* Long DOIs and addresses must not push a 320px screen sideways. */
-.cv-entry a,
-.footer a {
+.cv-dim {
+  color: var(--text-dim);
+}
+
+.cv-me {
+  font-weight: 500;
+}
+
+/* A DOI has no spaces to break at, so it has to be allowed to break anywhere. */
+.cv-doi {
   overflow-wrap: anywhere;
 }
 
 .cv-entry ul {
-  margin-top: 8px;
+  margin: 4px 0 0;
+  padding-left: 18px;
+  list-style: disc;
 }
 
 .cv-entry li {
-  margin-bottom: 6px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .cv-entry li:last-child {
   margin-bottom: 0;
-}
-
-.cv-list {
-  margin: 0;
-}
-
-.cv-list li {
-  margin-bottom: 4px;
 }
 
 @media (min-width: 640px) {
@@ -990,10 +1025,6 @@ button {
 
   .cv-row {
     grid-template-columns: 9.5rem 1fr;
-  }
-
-  .cv-date {
-    padding-top: 0.25em;
   }
 }
 
@@ -1048,8 +1079,8 @@ button {
     --bg: #FFFFFF;
     --surface: #FFFFFF;
     --surface-high: #FFFFFF;
-    --text: #24282C;
-    --text-dim: #5C646B;
+    --text: #000000;
+    --text-dim: #444444;
     --border: #DFE3E6;
     --accent: #2F6F8F;
     --accent-hover: #24576F;
@@ -1089,12 +1120,16 @@ button {
   .cv-panel {
     margin: 0;
     padding: 0;
+    background: none;
     border: 0;
     border-radius: 0;
   }
 
+  /* page-break-inside for older print engines, break-inside for current ones,
+     so a bullet list never splits across a page. */
   .cv-row,
   .project {
+    page-break-inside: avoid;
     break-inside: avoid;
   }
 
