@@ -964,6 +964,13 @@ button {
   margin-bottom: 18px;
 }
 
+/* Sections where every row is one short line do not need the breathing room a
+   multi-line entry does. Declared before the :last-child reset below, which has
+   equal specificity and would otherwise stop winning for the final row. */
+.cv-section-compact .cv-row {
+  margin-bottom: 8px;
+}
+
 .cv-row:last-child {
   margin-bottom: 0;
 }
