@@ -47,25 +47,132 @@
     <div class="projects">
 
       <article class="project">
-        <h2>Can you beat a Markov chain?</h2>
-        <p>An order-2 Markov chain that learns your rock paper scissors patterns in real time and plays the counter. Built to show that people are much worse at generating random sequences than they think.</p>
-        <p class="project-tools">Vanilla JavaScript, no dependencies.</p>
-        <ul class="project-links">
-          <li><a href="/#game">Play it</a></li>
-          <li><a href="https://github.com/taeyunkim03/personal-website/blob/main/game.js">Source on GitHub</a></li>
-        </ul>
+        <div class="project-head">
+          <h2>GPU-Accelerated Single-Cell RNA-seq Pipeline</h2>
+          <p class="project-year">2025–26</p>
+        </div>
+        <div class="project-main">
+          <div class="project-figure">
+            <a href="/assets/gpu_scrnaseq_pipeline_poster.pdf">
+              <img src="/assets/figures/gpu-poster-full.png" width="1100" height="881" loading="lazy"
+                   alt="Research symposium poster on a GPU-accelerated single-cell RNA-seq pipeline">
+            </a>
+          </div>
+          <div class="project-body">
+            <p>Rebuilt the lab's single-cell analysis pipeline to run on GPU, taking a 37,000-cell fetal macaque brain atlas from over three hours to 23 minutes end to end, with up to 15-fold speedup on individual steps. Annotation quality held at 0.998 mean confidence across 21 cell types. Presented at the 2026 Undergraduate Research Symposium.</p>
+            <p class="project-tools">CellBender, scVI/scANVI, RAPIDS-SingleCell, Tillicum HPC, NVIDIA H200</p>
+            <ul class="project-links">
+              <li><a href="/assets/gpu_scrnaseq_pipeline_poster.pdf">Poster</a></li>
+            </ul>
+          </div>
+        </div>
       </article>
 
       <article class="project">
-        <h2>Memory, stability and chaos in reservoir computing</h2>
-        <p>Built an echo state network in Python and studied how the spectral radius drives the transition from stable to chaotic dynamics. Forecasted the Lorenz system with the reservoir and linked memory capacity to prediction accuracy, showing that forecasting peaks near the edge of chaos where the reservoir balances memory against stability.</p>
-        <p class="project-tools">Python, NumPy, SciPy.</p>
+        <div class="project-head">
+          <h2>Memory, Stability, and Chaos in Reservoir Computing</h2>
+          <p class="project-year">2026</p>
+        </div>
+        <div class="project-main">
+          <div class="project-figure">
+            <a href="/assets/reservoir_computing.pdf">
+              <img src="/assets/figures/reservoir-three-regimes.png" width="1100" height="331" loading="lazy"
+                   alt="Three plots of reservoir states decaying, settling slowly, then oscillating as the spectral radius increases">
+            </a>
+          </div>
+          <div class="project-body">
+            <p>Modeled an echo state network as a continuous-time dynamical system and derived where it stops being useful, showing the rest state destabilizes exactly when the spectral radius reaches the leakage rate. A numerical Lorenz benchmark then contradicted the popular claim that prediction works best at the edge of chaos, with accuracy peaking comfortably inside the stable regime instead.</p>
+            <p class="project-tools">Python, NumPy, SciPy, LaTeX</p>
+            <ul class="project-links">
+              <li><a href="/assets/reservoir_computing.pdf">Paper</a></li>
+            </ul>
+          </div>
+        </div>
       </article>
 
       <article class="project">
-        <h2>Likelihood and Bayesian inference for COVID-19 vaccine efficacy</h2>
-        <p>Estimated vaccine efficacy from clinical trial counts using a binomial likelihood model, deriving the maximum likelihood estimate and a confidence interval, then tested the efficacy hypothesis with a likelihood ratio test. Reframed the same problem in a Bayesian setting with a prior on the efficacy parameter and compared the frequentist and Bayesian conclusions.</p>
-        <p class="project-tools">R.</p>
+        <div class="project-head">
+          <h2>Generalizability of Sentiment-Based Stock Market Prediction</h2>
+          <p class="project-year">2026</p>
+        </div>
+        <div class="project-main">
+          <div class="project-figure">
+            <a href="/assets/sentiment_stock_prediction.pdf">
+              <img src="/assets/figures/stock-fitted-probability.png" width="1100" height="392" loading="lazy"
+                   alt="Two plots showing fitted probability of a market gain barely moving and staying near fifty percent">
+            </a>
+          </div>
+          <div class="project-body">
+            <p>A published study found plain logistic regression beating FinBERT and GPT-4 at predicting Nigerian market direction from news sentiment. I tested whether it transfers to the US, using eight years of Dow Jones closes paired with Reddit headlines. It does not. Accuracy collapsed from 82% to chance, and a likelihood ratio test found today's sentiment carries no signal at all. The model passes every diagnostic and still cannot tell an up day from a down day.</p>
+            <p class="project-tools">R, glmnet, TF-IDF, stepwise AIC</p>
+            <ul class="project-links">
+              <li><a href="/assets/sentiment_stock_prediction.pdf">Slides</a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="project-head">
+          <h2>Likelihood and Bayesian Inference for COVID-19 Vaccine Efficacy</h2>
+          <p class="project-year">2026</p>
+        </div>
+        <div class="project-main">
+          <div class="project-figure">
+            <a href="/assets/covid_vaccine_efficacy.pdf">
+              <img src="/assets/figures/covid-prior-posterior.png" width="1100" height="820" loading="lazy"
+                   alt="A pessimistic prior distribution and the much narrower posterior it produced">
+            </a>
+          </div>
+          <div class="project-body">
+            <p>Re-analyzed the Pfizer BNT162b2 trial data two ways. The likelihood approach put efficacy at 95.1%, matching the published result. A deliberately pessimistic Bayesian prior, one starting from the assumption that the vaccine does nothing, still produced a posterior median of 75.2% and placed the entire posterior above the FDA's 30% threshold. The point was to see whether the conclusion survives a skeptical starting position.</p>
+            <p class="project-tools">R, Beta-binomial conjugacy, parametric bootstrap, likelihood ratio test</p>
+            <ul class="project-links">
+              <li><a href="/assets/covid_vaccine_efficacy.pdf">Paper</a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="project-head">
+          <h2>KoJobs UW Official Website</h2>
+          <p class="project-year">2024–26</p>
+        </div>
+        <div class="project-main">
+          <div class="project-figure">
+            <a href="https://kojobs.netlify.app" target="_blank" rel="noopener">
+              <img src="/assets/figures/kojobs.png" width="1100" height="515" loading="lazy"
+                   alt="Homepage of the KoJobs UW website">
+            </a>
+          </div>
+          <div class="project-body">
+            <p>Built and later rebuilt the six-page site for a 250-member student organization that runs corporate seminars with speakers from Amazon, Google, Microsoft and PwC. Still in daily use, carrying the current officer roster, the events calendar and membership signups.</p>
+            <p class="project-tools">HTML, CSS, JavaScript, Netlify</p>
+            <ul class="project-links">
+              <li><a href="https://kojobs.netlify.app" target="_blank" rel="noopener">Visit</a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- No figure for this one. Rendered full width rather than left with an
+           empty column, which would break the alternation and read as a
+           failed image load. -->
+      <article class="project project-wide">
+        <div class="project-head">
+          <h2>Can You Beat a Markov Chain?</h2>
+          <p class="project-year">2026</p>
+        </div>
+        <div class="project-main">
+          <div class="project-body">
+            <p>An order-2 Markov chain that learns your rock paper scissors habits in real time and plays the counter, with the nine-state transition model rendered live so you can watch it learn. Built because people are far worse at generating random sequences than they think.</p>
+            <p class="project-tools">Vanilla JavaScript, SVG, no dependencies</p>
+            <ul class="project-links">
+              <li><a href="/#game">Play it</a></li>
+            </ul>
+          </div>
+        </div>
       </article>
 
     </div>

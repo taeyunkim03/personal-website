@@ -34,6 +34,10 @@
   --grid-edge: #A89372;
   --grid-live: #D93A2B;
 
+  /* The ground every figure is printed on. Fixed in both themes on purpose:
+     the plots themselves are drawn on white. */
+  --figure-paper: #FCFCFA;
+
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -1050,9 +1054,21 @@ button {
   margin-top: 16px;
 }
 
+/* Figure and text side by side, alternating down the page. Single column
+   first: below 640px the figure sits on top and the alternation stops. */
 .project {
   padding: 32px 0;
   border-top: 1px solid var(--border);
+}
+
+/* The figure and the text sit side by side; the title above spans both, so a
+   long title is not squeezed into a half-width column and the figure lines up
+   with the paragraph rather than the heading. */
+.project-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
 }
 
 .project:first-child {
@@ -1060,26 +1076,113 @@ button {
   border-top: 0;
 }
 
-.project h2 {
-  font-size: 1.25rem;
+/* The entry with no figure. Full width rather than a column left empty. */
+.project-wide .project-main {
+  display: block;
 }
 
-.project h2 + p {
-  margin-top: 8px;
+/* Plots and screenshots are drawn on white. They keep a light ground in both
+   themes instead of inheriting --surface, so on the dark page they read as a
+   figure printed on paper rather than a hole punched through it. Inverting or
+   filtering them would misreport what the plots actually show. */
+.project-figure a {
+  display: block;
+  padding: 10px;
+  background: var(--figure-paper);
+  border: 1px solid var(--border);
+  border-radius: 4px;
 }
 
-.project-tools {
-  font-size: 0.9375rem;
+/* Aspect ratios run from 1.25:1 to 3.33:1. Each keeps its own height rather
+   than being cropped or letterboxed to a shared ratio, so rows differ in
+   height by design. */
+.project-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.project-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.project-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 16px;
+}
+
+.project-head h2 {
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.project-year {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--text-dim);
+}
+
+.project-body p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* No leading margin, so the first line of the paragraph starts level with the
+   top of the figure beside it. */
+.project-body p:first-child {
+  margin-top: 0;
+}
+
+/* Two classes deep so it outranks `.project-body p`, which would otherwise
+   win on specificity and hold these at 14px. */
+.project-body .project-tools {
+  font-size: 13.5px;
   color: var(--text-dim);
 }
 
 .project-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 24px;
-  margin: 8px 0 0;
+  gap: 4px 20px;
+  margin: 10px 0 0;
   padding: 0;
+  font-size: 13.5px;
   list-style: none;
+}
+
+@media (min-width: 640px) {
+  .project-main {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .project:nth-child(even) .project-main {
+    flex-direction: row-reverse;
+  }
+
+  .project-figure {
+    flex: 0 0 320px;
+  }
+
+  /* The text column is only about 360px once the figure takes its 260, so a
+     long title would push the year onto its own line. Letting the title wrap
+     inside its own box instead keeps the year pinned right, on the baseline of
+     the first line. Below 640px the wrap above still applies. */
+  .project-head {
+    flex-wrap: nowrap;
+  }
+
+  .project-year {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
 }
 
 /* Print ------------------------------------------------------------------- */
