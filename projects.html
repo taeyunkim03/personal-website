@@ -8,8 +8,13 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Projects by Taeyun Kim">
   <meta property="og:description" content="A Markov chain rock paper scissors bot, reservoir computing experiments and Bayesian inference for vaccine efficacy.">
+  <meta property="og:url" content="https://taeyunkim.netlify.app/projects.html">
   <meta property="og:site_name" content="Taeyun Kim">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://taeyunkim.netlify.app/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Taeyun Kim, statistics and data science at the University of Washington">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#FAF5E9">
   <script src="/theme.js"></script>
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -60,7 +65,7 @@
           </div>
           <div class="project-body">
             <p>Rebuilt the lab's single-cell analysis pipeline to run on GPU, taking a 37,000-cell fetal macaque brain atlas from over three hours to 23 minutes end to end, with up to 15-fold speedup on individual steps. Annotation quality held at 0.998 mean confidence across 21 cell types. Presented at the 2026 Undergraduate Research Symposium.</p>
-            <p class="project-tools">CellBender, scVI/scANVI, RAPIDS-SingleCell, Tillicum HPC, NVIDIA H200</p>
+            <p class="project-tools">CellBender, scVI/scANVI, RAPIDS-SingleCell, Tillicum HPC</p>
             <ul class="project-links">
               <li><a href="/assets/gpu_scrnaseq_pipeline_poster.pdf">Poster</a></li>
             </ul>
@@ -126,7 +131,7 @@
           </div>
           <div class="project-body">
             <p>Re-analyzed the Pfizer BNT162b2 trial data two ways. The likelihood approach put efficacy at 95.1%, matching the published result. A deliberately pessimistic Bayesian prior, one starting from the assumption that the vaccine does nothing, still produced a posterior median of 75.2% and placed the entire posterior above the FDA's 30% threshold. The point was to see whether the conclusion survives a skeptical starting position.</p>
-            <p class="project-tools">R, Beta-binomial conjugacy, parametric bootstrap, likelihood ratio test</p>
+            <p class="project-tools">R, Bayesian statistics, Beta-binomial conjugacy, parametric bootstrap, likelihood ratio test</p>
             <ul class="project-links">
               <li><a href="/assets/covid_vaccine_efficacy.pdf">Paper</a></li>
             </ul>
@@ -148,7 +153,7 @@
           </div>
           <div class="project-body">
             <p>Built and later rebuilt the six-page site for a 250-member student organization that runs corporate seminars with speakers from Amazon, Google, Microsoft and PwC. Still in daily use, carrying the current officer roster, the events calendar and membership signups.</p>
-            <p class="project-tools">HTML, CSS, JavaScript, Netlify</p>
+            <p class="project-tools">HTML, CSS, JavaScript</p>
             <ul class="project-links">
               <li><a href="https://kojobs.netlify.app" target="_blank" rel="noopener">Visit</a></li>
             </ul>
@@ -167,7 +172,7 @@
         <div class="project-main">
           <div class="project-body">
             <p>An order-2 Markov chain that learns your rock paper scissors habits in real time and plays the counter, with the nine-state transition model rendered live so you can watch it learn. Built because people are far worse at generating random sequences than they think.</p>
-            <p class="project-tools">Vanilla JavaScript, SVG, no dependencies</p>
+            <p class="project-tools">JavaScript, Markov chains</p>
             <ul class="project-links">
               <li><a href="/#game">Play it</a></li>
             </ul>
