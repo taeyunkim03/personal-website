@@ -1,13 +1,5 @@
-/*
- * Light and dark theme toggle.
- *
- * Loaded synchronously from <head> rather than deferred, so the stored choice
- * lands on <html> before the first paint. Deferring it would let a dark-theme
- * visitor see a flash of the light palette on every page load.
- *
- * The choice is kept in localStorage and is the only thing this site stores.
- * Until someone picks a side, the operating system preference wins.
- */
+// Light and dark theme. Loaded in <head> without defer so the saved theme is
+// applied before the page paints.
 (function () {
   'use strict';
 
@@ -15,12 +7,10 @@
   var META = { light: '#FAF5E9', dark: '#14171A' };
   var root = document.documentElement;
 
-  // Lets the stylesheet reveal the button. Without JavaScript the button could
-  // not do anything, so CSS keeps it hidden rather than showing a dead control.
+  // Lets CSS show the parts that need JavaScript, like the theme button.
   root.className += (root.className ? ' ' : '') + 'js';
 
-  // Private browsing and blocked site data both throw on access, not just on
-  // write, so every localStorage call here is guarded.
+  // localStorage can throw in private browsing, even when reading.
   function stored() {
     try {
       var value = window.localStorage.getItem(KEY);
@@ -37,11 +27,11 @@
   function apply(theme) {
     root.setAttribute('data-theme', theme);
 
-    // Keeps the mobile browser chrome in step with the page.
+    // Match the browser bar color on mobile.
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) { meta.setAttribute('content', META[theme]); }
 
-    // Absent on the first run: this script parses before the button does.
+    // Not there yet on the first call, since this runs before the body loads.
     var button = document.getElementById('theme-toggle');
     if (button) {
       button.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
@@ -53,7 +43,7 @@
   apply(current);
 
   document.addEventListener('DOMContentLoaded', function () {
-    apply(current); // Labels the button now that it exists.
+    apply(current); // again, now that the button exists
 
     var button = document.getElementById('theme-toggle');
     if (!button) { return; }
@@ -64,12 +54,12 @@
       try {
         window.localStorage.setItem(KEY, current);
       } catch (e) {
-        // The theme still applies for this page view; it just will not persist.
+        // Still works for this page, it just won't be saved.
       }
     });
   });
 
-  // Track the system setting, but only while the visitor has not overridden it.
+  // Follow the system setting until the visitor picks a theme.
   if (system) {
     var onSystemChange = function (event) {
       if (stored()) { return; }

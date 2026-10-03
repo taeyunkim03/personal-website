@@ -52,7 +52,7 @@
       <div class="intro-text">
         <h1>Taeyun Kim</h1>
         <p>I'm a <span class="term">Statistics - Data Science</span> major at the University of
-        Washington, minoring in Applied Mathematics, and I work as a
+        Washington with minors in Applied Mathematics and Informatics. I also work as a
         <span class="term">bioinformatics</span> research assistant in the Adams Waldorf Lab.</p>
         <p class="intro-line">
           <span class="reveal">
@@ -72,9 +72,6 @@
     </section>
 
     <section class="latent" id="latent" aria-labelledby="latent-title">
-      <!-- Heading inside the panel, as the game card has it. The section is
-           gated on the `js` class in style.css, so without JavaScript neither
-           the heading nor the box appears. -->
       <h2 class="section-title" id="latent-title">Latent Space</h2>
       <div class="latent-canvas">
         <svg class="cloud" id="cloud-svg" viewBox="0 0 660 410" role="img"
@@ -94,7 +91,7 @@
       <h2 class="section-title" id="game-title">Can you beat a Markov chain?</h2>
       <p>This bot has no strategy. It remembers your last two throws and plays whatever tends to beat you after that pattern.</p>
 
-      <!-- Everything below stays hidden until game.js runs, so without JavaScript the block is just the heading and the description. -->
+      <!-- Hidden until game.js runs. -->
       <div class="game-ui" id="game-ui" hidden>
         <div class="throws" role="group" aria-label="Your throw">
           <button type="button" class="throw-btn" data-throw="R">Rock</button>
@@ -105,8 +102,7 @@
 
         <p class="game-result" id="game-result" aria-live="polite"></p>
 
-        <!-- Shown only while the idle demo runs, so nobody mistakes the
-             moving numbers for their own score. game.js reveals and hides it. -->
+        <!-- Only shown while the demo is running. -->
         <p class="demo-note" id="demo-note" hidden>Demo running. Press a button to play.</p>
 
 
@@ -120,8 +116,7 @@
               <path d="M0 0.5L7 4L0 7.5Z"/>
             </marker>
           </defs>
-          <!-- Edges are painted behind the blocks: a line passing under a block
-               reads as depth, which is what you want in an isometric scene. -->
+          <!-- Edges first so they draw behind the blocks. -->
           <g id="chain-edges">
             <path class="chain-edge" id="edge-R" d="" marker-end="url(#chain-arrow)"/>
             <path class="chain-edge" id="edge-P" d="" marker-end="url(#chain-arrow)"/>
@@ -200,7 +195,6 @@
 
     <section class="now" aria-labelledby="now-title">
       <h2 class="section-title" id="now-title">Open Tabs <time class="updated" id="now-updated" datetime="2026-09">September 2026</time></h2>
-      <!-- Replace the five list items below with real copy. Nothing else needs to change. -->
       <ul>
         <li>Building a GUI for the Bulk RNA-seq pipeline I wrote, so the rest of the lab can run it without touching a command line.</li>
         <li>Putting together graduate school applications, due in December.</li>
@@ -225,10 +219,8 @@
   <script src="/game.js" defer></script>
   <script src="/cloud.js" defer></script>
   <script>
-  /* Keeps the "Now" stamp on the current month so it never needs a manual edit.
-     The month written into the markup is the no-JavaScript fallback. Locale is
-     pinned to en-US so the stamp reads the same for every visitor, matching the
-     page's lang. */
+  /* Keep the date on the current month. The month in the HTML is the fallback
+     when JavaScript is off. */
   (function () {
     'use strict';
     var el = document.getElementById('now-updated');

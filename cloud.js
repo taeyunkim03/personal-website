@@ -1,14 +1,5 @@
-/*
- * Latent space
- *
- * A slowly rotating three-dimensional scatter of what I work on and think
- * about, in five clusters. Unlabelled at rest apart from a few labels riding
- * the front-most points; hover or tap names one, drag turns the cloud.
- *
- * Vanilla JavaScript, no libraries: the projection below is about sixty lines
- * of arithmetic. Positions come from a seeded generator so the cloud has the
- * same shape on every visit. Nothing is stored anywhere.
- */
+// Slowly spinning 3D point cloud of things I work on and think about, in five
+// clusters. Hover or tap a point to see its name, drag to rotate.
 (function () {
   'use strict';
 
@@ -18,8 +9,6 @@
 
   var NS = 'http://www.w3.org/2000/svg';
 
-  // Centres sit further out than the clusters they name would need on their
-  // own: the clusters are wider now and were starting to touch.
   var CENTRES = [
     [-0.60,  0.12,  0.21],  // 0 statistics and data science
     [ 0.55,  0.23, -0.25],  // 1 the lab
@@ -28,14 +17,12 @@
     [-0.06, -0.63,  0.44]   // 4 personal
   ];
 
-  // Sampling radius per cluster, scaled by the cube root of the point count so
-  // density stays roughly even, with personal loosened on purpose so the cloud
-  // does not read as five identical blobs.
+  // Cluster radii. Personal is a bit looser so the clusters don't all look
+  // the same.
   var RADII = [0.36, 0.36, 0.36, 0.34, 0.42];
 
-  // Cluster names live in the comments and never render.
   var POINTS = [
-    // 0 statistics and data science (21)
+    // 0 statistics and data science
     ['Hypothesis testing',0],['Regression',0],['Generalized linear models',0],
     ['Mixed effects models',0],['Nonparametric methods',0],['Survival analysis',0],
     ['Time series',0],['A/B testing',0],['Experimental design',0],
@@ -44,7 +31,7 @@
     ['Bayesian inference',0],['Cross-validation',0],['Regularization',0],
     ['Conformal prediction',0],['Calibration',0],['Biostatistics',0],
 
-    // 1 the lab (20)
+    // 1 the lab
     ['Single-cell RNA-seq',1],['Bulk RNA-seq',1],['Spatial transcriptomics',1],
     ['Count matrices',1],['Read alignment',1],['Quality control',1],
     ['Unsupervised clustering',1],['Cell type annotation',1],['Marker genes',1],
@@ -53,7 +40,7 @@
     ['Cross-species atlases',1],['BLAST',1],['Partek',1],
     ['Pigtail macaques',1],['Flu and pregnancy',1],
 
-    // 2 computing (21)
+    // 2 computing
     ['HPC clusters',2],['SLURM',2],['Linux',2],
     ['Bash scripting',2],['The command line',2],['Parallel computing',2],
     ['GPU acceleration',2],['Memory limits',2],['Benchmarking',2],
@@ -62,7 +49,7 @@
     ['Java, SQL, MATLAB',2],['Hadoop',2],['Cloud platforms',2],
     ['Data visualization',2],['Machine learning',2],['AI',2],
 
-    // 3 math and modelling (17)
+    // 3 math and modelling
     ['Probability theory',3],['Stochastic processes',3],['Markov chains',3],
     ['Monte Carlo methods',3],['Linear algebra',3],['Differential equations',3],
     ['Numerical methods',3],['Optimization',3],['Graph theory',3],
@@ -70,7 +57,7 @@
     ['Chaos and the Lorenz system',3],['Reservoir computing',3],['Neural networks',3],
     ['Transformers',3],['Computational neuroscience',3],
 
-    // 4 personal (14)
+    // 4 personal
     ['Seoul',4],['Seattle',4],['Korean',4],
     ['Korean food',4],['Military service',4],
     ['Quant trading',4],['HPC consulting',4],['Mentoring',4],
@@ -81,10 +68,7 @@
   var LIGHT = ['#6B4A8F','#2F7A4E','#6B6B63','#A85434','#A8415E'];
   var DARK  = ['#A88FD0','#5FB380','#A8A89C','#DB8558','#D9788F'];
 
-  /* Layout ----------------------------------------------------------------
-   * Seeded, never Math.random: the map has to be the same shape on every
-   * visit or it is not a thing anyone can come back and recognise. */
-
+  // Seeded so the cloud has the same shape on every visit.
   var SEED = 20260910;
 
   function mulberry32(a) {
@@ -100,7 +84,7 @@
 
   var pts = POINTS.map(function (p) {
     var x, y, z;
-    do {                                   // rejection sample inside the ball
+    do { // random point inside the unit sphere
       x = rand() * 2 - 1; y = rand() * 2 - 1; z = rand() * 2 - 1;
     } while (x * x + y * y + z * z > 1);
     var c = CENTRES[p[1]], r = RADII[p[1]];
@@ -108,8 +92,8 @@
              x: c[0] + x * r, y: c[1] + y * r, z: c[2] + z * r };
   });
 
-  // One relaxation pass so no two points sit on top of each other.
-  var MIN = 0.075;   // clusters are denser now; the old threshold fought the layout
+  // Push apart points that are too close together.
+  var MIN = 0.075;
   for (var a = 0; a < pts.length; a += 1) {
     for (var b = a + 1; b < pts.length; b += 1) {
       var dx = pts[b].x - pts[a].x, dy = pts[b].y - pts[a].y, dz = pts[b].z - pts[a].z;
@@ -122,24 +106,10 @@
     }
   }
 
-  /* View ------------------------------------------------------------------
-   * The narrow viewBox is not cosmetic. With the desktop box on a 360px
-   * screen a 13.5-unit label renders near 7px and cannot be read. */
-
   var DIST = 3.2;
-  // The cloud is taller than it is wide, so the old 660-wide frame left large
-  // dead margins either side and made everything render small. Narrowing the
-  // box scales the whole drawing up at the same container width; sc then adds
-  // a little more, bounded by how close the outermost point may come to an
-  // edge before its label stops fitting.
-  // sc is bounded by how close the outermost point may come to an edge before
-  // its label stops fitting. The 93-point layout reaches further than the 58
-  // did, so this is lower than before while the cloud still lands larger on
-  // screen: a smaller scale over a wider spread.
-  // The cloud is not vertically symmetric: over a full rotation it reaches
-  // about 1.17 units above centre and only 0.92 below, so a frame centred on
-  // the midpoint leaves roughly three times the dead space underneath. Height
-  // and cy are set from those two bounds instead, giving equal margins.
+  // Narrow view for phones, where the wide one shrinks labels too much to read.
+  // sc is as large as the outer labels allow, and cy sits below the middle
+  // since the cloud reaches further up than down.
   var WIDE = { w: 560, h: 364, cx: 280, cy: 201, sc: 155 };
   var NARROW = { w: 360, h: 296, cx: 180, cy: 163, sc: 124 };
   var view = WIDE;
@@ -150,9 +120,6 @@
 
   var ry = 0.5, rx = -0.16;
   var SPIN = 0.0022;
-
-  /* Elements --------------------------------------------------------------
-   * Built once. Each frame only moves things; nothing is created or parsed. */
 
   var dotLayer = document.getElementById('cloud-dots');
   var labelLayer = document.getElementById('cloud-labels');
@@ -193,22 +160,20 @@
   pickLayer.appendChild(pickBox); pickLayer.appendChild(pickText);
   pickLayer.setAttribute('opacity', '0');
 
-  // Label widths in user units. Measured from the real elements, and measured
-  // again once webfonts land, since the fallback face is a different width.
+  // Label sizes. Measured again after the webfont loads since the fallback
+  // font has different widths.
   function measure() {
     nodes.forEach(function (n) {
       n.text.setAttribute('x', '0');
       n.text.setAttribute('y', '0');
       try {
-        var b = n.text.getBBox();       // relative to an anchor at the origin
+        var b = n.text.getBBox();
         n.w = b.width; n.bx = b.x; n.by = b.y; n.bh = b.height;
       } catch (e) {
         n.w = n.text.textContent.length * 6; n.bx = 0; n.by = -9; n.bh = 12;
       }
     });
   }
-
-  /* Projection ------------------------------------------------------------ */
 
   var proj = pts.map(function () { return { sx: 0, sy: 0, k: 1, d: 0 }; });
 
@@ -229,23 +194,18 @@
     }
   }
 
-  /* Ambient labels --------------------------------------------------------
-   * Up to five, on the front hemisphere, chosen greedily so none overlaps.
-   * Recomputed on a timer rather than per frame, held for a minimum time and
-   * cross-faded: any one of those alone still flickers. */
+  // A few labels on the front points, chosen so they don't overlap. They're
+  // rechosen every 400ms, held for at least 1.5s and fade in and out, so they
+  // don't flicker.
 
-  var shown = {};           // point index -> time it was first shown
+  var shown = {}; // point index -> time first shown
   var MAX_LABELS = 5;
   var HOLD_MS = 1500;
   var RECOMPUTE_MS = 400;
   var lastChoice = 0;
 
-  // A label is kept for HOLD_MS, so the question at selection time is not
-  // "is this spot free now" but "does it stay free for as long as the label
-  // lives". Each candidate is therefore tested as a swept rectangle: the union
-  // of where its box sits across the whole hold window. Two labels accepted
-  // against each other's sweeps cannot collide later, which means held labels
-  // never have to be evicted, which is what kept the old version flickering.
+  // Each candidate is checked against the whole area its label will cover
+  // while it's held, so held labels never collide and never need removing.
   var HOLD_FRAMES = HOLD_MS / 16.7;
   var SWEEP_STEPS = 10;
 
@@ -262,8 +222,7 @@
     return { sx: view.cx + x1 * k * view.sc, sy: view.cy - y2 * k * view.sc, d: z2 };
   }
 
-  // Built from the measured glyph box at the same anchor render() uses, so the
-  // rectangle tested here is the rectangle that actually appears on screen.
+  // Same label position render() uses.
   function rectFor(q, n) {
     var flip = q.sx > view.w * 0.6;
     var ax = flip ? q.sx - 12 - n.w : q.sx + 12;
@@ -272,8 +231,7 @@
              x2: ax + n.bx + n.w, y2: ay + n.by + n.bh };
   }
 
-  // Null when the label would leave the canvas at any point in the window,
-  // which is also what stops one drifting off an edge between recomputes.
+  // Null if the label would leave the canvas at any point while it's held.
   function sweptRect(i) {
     var n = nodes[i];
     var spin = reduced ? 0 : SPIN;
@@ -298,8 +256,7 @@
   function chooseLabels(now) {
     var taken = [], next = {}, count = 0;
 
-    // Held labels keep their slots outright. They were accepted against a
-    // sweep covering their whole life, so nothing can have moved into them.
+    // Labels still being held keep their spots.
     Object.keys(shown).forEach(function (key) {
       var i = +key;
       if (now - shown[i] < HOLD_MS) {
@@ -325,16 +282,12 @@
       count += 1;
     }
 
-    // Inline style, not the opacity attribute: `.cloud-label { opacity: 0 }`
-    // is a stylesheet rule and outranks a presentation attribute, so setting
-    // the attribute leaves every label invisible.
+    // Inline style because the CSS opacity rule overrides the SVG attribute.
     for (var k = 0; k < nodes.length; k += 1) {
       nodes[k].text.style.opacity = next[k] !== undefined ? '1' : '0';
     }
     shown = next;
   }
-
-  /* Drawing --------------------------------------------------------------- */
 
   var selected = null;
   var orderKey = '';
@@ -350,8 +303,8 @@
   function render() {
     projectAll();
 
-    // Nearer points must cover farther ones, which in SVG means later in the
-    // document. Re-append only when the order actually changed.
+    // Nearer points have to come later in the SVG to draw on top. Only
+    // reorder when the order changes.
     var idx = [];
     for (var i = 0; i < pts.length; i += 1) { idx.push(i); }
     idx.sort(function (p, q) { return proj[p].d - proj[q].d; });
@@ -371,13 +324,12 @@
       node.hit.setAttribute('cy', q.sy.toFixed(2));
 
       if (shown[j] !== undefined) {
-        // The selected label supersedes the ambient one for the same dot.
+        // Hide the ambient label when its dot is selected.
         if (j === selected) { node.text.style.opacity = '0'; }
         var flip = q.sx > view.w * 0.6;
         var x = flip ? q.sx - 12 - node.w : q.sx + 12;
         x = Math.max(2, Math.min(x, view.w - node.w - 2));
-        // Clamp vertically too: the dot keeps moving between recomputes, so a
-        // label chosen inside the canvas can still drift off the top or bottom.
+        // The dot keeps moving between label picks, so clamp vertically too.
         var ly = Math.max(11, Math.min(q.sy + 4, view.h - 4));
         node.text.setAttribute('x', x.toFixed(2));
         node.text.setAttribute('y', ly.toFixed(2));
@@ -415,14 +367,12 @@
     render();
   }
 
-  /* Drag ------------------------------------------------------------------ */
-
   var dragging = false, lastX = 0, lastY = 0, moved = 0, suppressClick = false;
 
   svg.addEventListener('pointerdown', function (e) {
     dragging = true; moved = 0; suppressClick = false;
     lastX = e.clientX; lastY = e.clientY;
-    try { svg.setPointerCapture(e.pointerId); } catch (err) { /* not capturable */ }
+    try { svg.setPointerCapture(e.pointerId); } catch (err) {}
   });
 
   svg.addEventListener('pointermove', function (e) {
@@ -433,15 +383,15 @@
     ry += dx * 0.008;
     rx += dy * 0.006;
     rx = Math.max(-1.1, Math.min(1.1, rx));
-    if (!running) { render(); chooseLabels(now()); }   // reduced motion draws on demand
+    if (!running) { render(); chooseLabels(now()); } // no animation loop with reduced motion
   });
 
   function endDrag(e) {
     if (!dragging) { return; }
     dragging = false;
-    // Without this every drag ends by selecting whatever dot it began on.
+    // So the end of a drag doesn't count as a click on a dot.
     if (moved > 4) { suppressClick = true; }
-    try { svg.releasePointerCapture(e.pointerId); } catch (err) { /* already gone */ }
+    try { svg.releasePointerCapture(e.pointerId); } catch (err) {}
   }
   svg.addEventListener('pointerup', endDrag);
   svg.addEventListener('pointercancel', endDrag);
@@ -449,8 +399,6 @@
   svg.addEventListener('pointerleave', function () {
     if (!coarse) { select(null); }
   });
-
-  /* Loop ------------------------------------------------------------------ */
 
   var running = false, onScreen = false, frame = 0;
 
@@ -481,9 +429,7 @@
   }
   document.addEventListener('visibilitychange', sync);
 
-  /* Theme and size -------------------------------------------------------- */
-
-  // theme.js sets data-theme on <html> and fires nothing, so watch the attribute.
+  // theme.js doesn't fire an event, so watch data-theme instead.
   if (window.MutationObserver) {
     new window.MutationObserver(paint).observe(document.documentElement,
       { attributes: true, attributeFilter: ['data-theme'] });
@@ -499,9 +445,6 @@
   }
   window.addEventListener('resize', applyView);
 
-  /* Start ----------------------------------------------------------------- */
-
-  // Visibility is CSS's job now, keyed on the `js` class: see style.css.
   view = window.innerWidth < 640 ? NARROW : WIDE;
   svg.setAttribute('viewBox', '0 0 ' + view.w + ' ' + view.h);
   measure();
@@ -512,7 +455,7 @@
 
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () {
-      measure();                       // widths change when the webfont lands
+      measure();
       render();
       chooseLabels(now());
     });

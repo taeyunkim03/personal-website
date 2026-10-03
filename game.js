@@ -1,14 +1,6 @@
-/*
- * Can you beat a Markov chain?
- *
- * Rock paper scissors against an order-2 Markov chain over the player's own
- * throw history. The state is the player's previous two throws. For each
- * state the bot counts what the player threw next, predicts the most common
- * follow-up, and plays the throw that beats it.
- *
- * Vanilla JavaScript, no dependencies. All state lives in memory and is gone
- * on reload. Nothing is stored or sent anywhere.
- */
+// Rock paper scissors against an order-2 Markov chain. The bot looks at the
+// player's last two throws, predicts the most common next throw after that
+// pair, and plays what beats it.
 (function () {
   'use strict';
 
@@ -19,34 +11,27 @@
   var NAME = { R: 'Rock', P: 'Paper', S: 'Scissors' };
   var BEATS = { R: 'P', P: 'S', S: 'R' }; // BEATS[x] is the throw that beats x.
 
-  // On this fraction of moves the bot ignores its prediction and throws at
-  // random. Without it, a player who has worked out the rule can win every
-  // round by feeding it a pattern and then breaking it. A little noise keeps
-  // the game honest in both directions and makes it feel less rigged.
+  // Chance the bot throws at random instead of using its prediction. Without
+  // it, someone who knows the rule could win every round.
   var EXPLORE = 0.10;
 
-  // Counts are not pre-seeded. The first rounds really are random, and the
-  // bot only starts to bite once it has seen a pattern more than once.
-  //
-  // A whole game lives in one bundle, and there are two bundles: the idle
-  // demo plays into its own and the visitor plays into the other. Handover is
-  // a pointer swap to an object the demo never touched, so a trained model
-  // cannot leak into somebody's first real round through a missed field.
+  // The demo and the visitor each play in their own game object, so nothing
+  // the demo learned carries over into a real game.
   function freshGame() {
     return {
-      last: [],    // previous throws, at most two
+      last: [],    // last two throws
       counts: {},  // state -> { R: n, P: n, S: n }
       rounds: 0,
       wins: 0,
       losses: 0,
       ties: 0,
-      visited: []  // recently occupied states; only the grid's trail reads it
+      visited: []  // recent states, for the grid trail
     };
   }
 
-  var liveGame = freshGame(); // the visitor's game; the demo never writes here
-  var demoGame = freshGame(); // the demo's game; abandoned at handover
-  var active = liveGame;      // whichever bundle the renderers draw
+  var liveGame = freshGame();
+  var demoGame = freshGame();
+  var active = liveGame; // the game being shown
 
   var buttons = ui.querySelectorAll('[data-throw]');
   var resultEl = document.getElementById('game-result');
@@ -96,9 +81,7 @@
     if (game.last.length > 2) { game.last.shift(); }
   }
 
-  // One complete round against a given bundle. Real play and the idle demo
-  // both come through here, so the model logic cannot fork into two copies
-  // that drift apart.
+  // Used by both real rounds and the demo.
   function playRound(game, player) {
     var bot = botThrowFor(game);
     var result = outcome(player, bot);
@@ -144,8 +127,8 @@
     } else {
       text = 'You are winning ' + rate + '% of rounds. Random play would get about 33%. The bot has found your pattern.';
     }
-    // Only touch the live region when the sentence changes, so a screen
-    // reader is not read the same verdict after every round.
+    // Only update when the text changes, so screen readers don't repeat it
+    // every round.
     if (verdictEl.textContent !== text) { verdictEl.textContent = text; }
   }
 
@@ -157,16 +140,10 @@
     resultEl.textContent = text;
   }
 
-  /* Chain grid --------------------------------------------------------------
-   *
-   * Nine cells, one per ordered pair. Row is the older throw, column is the
-   * newer one. From (a, b) the three successors are (b, R), (b, P), (b, S),
-   * which all sit in row b: the column you are in becomes the row you move to.
-   * That is why the marker only ever walks down a column and then along a row.
-   */
-
+  // Chain grid: one block per state. Row is the older throw and column is the
+  // newer one, so from state ab the next state is always in row b.
   var UX = 46;          // half-width of a block's top face
-  var UY = 27;          // screen step per grid position, toward the viewer
+  var UY = 27;          // y step per grid position
   var TOP = 23;         // half-height of the top face
   var BASE_X = 150;
   var BASE_Y = 56;
@@ -179,17 +156,15 @@
     [11, 'var(--grid-4)']
   ];
 
-  // Height encodes the same count the fill does, so the silhouette shows the
-  // player's bias at a glance. It must stay under UY: a taller block in front
-  // would rise into the top face of the one behind it, and the whole point of
-  // a single layer is that nothing can hide anything.
+  // Block height by count, same bands as the fill. Keep it under UY or a
+  // block in front would cover the top of the one behind it.
   var HEIGHTS = [3, 8, 13, 18, 23];
 
   var chainEl = document.querySelector('.chain');
   var descEl = document.getElementById('chain-desc');
   var markerEl = document.getElementById('chain-marker');
 
-  // The label sits at the centre of the top face, so the marker sits beside it.
+  // The label is centered on the top face, so the marker goes to its left.
   var MARKER_DX = 25;
 
   function idx(throwLetter) { return THROWS.indexOf(throwLetter); }
@@ -207,10 +182,10 @@
     return c ? c.R + c.P + c.S : 0;
   }
 
-  // Where a state's top face sits: its footprint is fixed, its height is not.
+  // Center of a state's top face. Taller blocks sit higher.
   function topOf(state) {
-    var i = idx(state.charAt(0));   // older throw picks the row
-    var k = idx(state.charAt(1));   // newer throw picks the column
+    var i = idx(state.charAt(0));
+    var k = idx(state.charAt(1));
     var h = HEIGHTS[bandOf(totalFor(state))];
     return { x: BASE_X + (i - k) * UX, y: BASE_Y + (i + k) * UY - h, h: h };
   }
@@ -227,9 +202,8 @@
     };
   }
 
-  // Stop the line where it meets the target's top face rather than a fixed
-  // distance short, so the arrowhead lands on the edge of the block whatever
-  // direction it arrives from. The face is a rhombus: |dx|/UX + |dy|/TOP = 1.
+  // Stop the line at the edge of the target's top face so the arrowhead
+  // touches it from any direction. The face is a rhombus: |dx|/UX + |dy|/TOP = 1.
   function edgeTo(from, to) {
     var dx = from.x - to.x, dy = from.y - to.y;
     var len = Math.sqrt(dx * dx + dy * dy);
@@ -238,8 +212,7 @@
     return 'M' + from.x + ' ' + from.y + 'L' + (to.x + dx * s) + ' ' + (to.y + dy * s);
   }
 
-  // Landing back on the same state: a small loop over the block, since a line
-  // from a point to itself has nothing to draw.
+  // Staying in the same state draws a small loop over the block.
   function selfLoop(t) {
     return 'M' + (t.x - 11) + ' ' + (t.y - 9) +
            'A 13 13 0 1 1 ' + (t.x + 11) + ' ' + (t.y - 9);
@@ -261,10 +234,8 @@
            (total === 1 ? ' time. ' : ' times. ') + 'Most often followed by ' + names + '.';
   }
 
-  // Everything painted here is written as an inline style, never as an SVG
-  // presentation attribute. A stylesheet rule outranks a presentation
-  // attribute, so `setAttribute('fill', ...)` against a CSS `.face { fill }`
-  // is silently discarded and every block keeps the base colour.
+  // Colors are set as inline styles, not attributes. CSS rules like
+  // .face { fill } override SVG attributes, so setAttribute('fill') does nothing.
   function renderChain() {
     if (!chainEl) { return; }
 
@@ -296,8 +267,7 @@
         leftEl.setAttribute('d', f.left);
         rightEl.setAttribute('d', f.right);
 
-        // The two lit sides are the same colour stepped down, so the shading
-        // costs no extra tokens and follows the theme automatically.
+        // Sides are darker mixes of the top color, so they follow the theme.
         topEl.style.fill = token;
         leftEl.style.fill = 'color-mix(in srgb, ' + token + ' 80%, #000)';
         rightEl.style.fill = 'color-mix(in srgb, ' + token + ' 64%, #000)';
@@ -323,7 +293,7 @@
       edge.style.opacity = '1';
 
       if (total === 0) {
-        // No history here, so the bot is about to throw at random. Dashes say so.
+        // New state, so the bot will throw at random. Dashed edges show that.
         edge.style.strokeWidth = '1';
         edge.style.strokeDasharray = '3 3';
       } else {
@@ -339,8 +309,8 @@
         var m = topOf(state);
         var target = 'translate(' + (m.x - MARKER_DX) + 'px, ' + m.y + 'px)';
         if (markerEl.style.opacity !== '1') {
-          // First appearance: place it, then fade in. Otherwise the transform
-          // transitions from identity and the marker flies in from the corner.
+          // First time: jump into place before fading in, or it slides in from
+          // the corner.
           markerEl.style.transition = 'none';
           markerEl.style.transform = target;
           void markerEl.getBoundingClientRect();
@@ -356,7 +326,7 @@
   }
 
   function play(player) {
-    stopDemo(); // The first real interaction ends the demo before the round lands.
+    stopDemo();
 
     var round = playRound(active, player);
 
@@ -376,24 +346,17 @@
     renderChain();
   }
 
-  /* Idle self-play ----------------------------------------------------------
-   *
-   * Until somebody plays, a simulated opponent throws every 900ms so the grid
-   * demonstrates itself: the marker hops, cells darken, edges thicken. The
-   * first real interaction stops it for good and hands over liveGame, on
-   * which nothing has ever been learned.
-   */
-
+  // Demo: until someone plays, a fake player throws every 900ms to show how the
+  // grid works. The first real play stops it for good.
   var DEMO_TICK_MS = 900;
   var demoNote = document.getElementById('demo-note');
-  var demoTimer = null;      // the pending tick, if one is scheduled
-  var demoStartTimer = null; // the settle delay before the first tick
-  var demoStopped = false;   // once true, the demo never runs again
-  var demoPrev = null;       // the simulated player's previous throw
+  var demoTimer = null;
+  var demoStartTimer = null;
+  var demoStopped = false;
+  var demoPrev = null;
 
-  // Humans under-repeat, so the simulated player does too: it repeats 15% of
-  // the time where uniform random would repeat 33%. That is the skew the bot
-  // visibly finds, without winning so hard the demo looks staged.
+  // People repeat a throw less often than random (33%), so the fake player
+  // only repeats 15% of the time. That gives the bot a pattern to find.
   function demoThrow() {
     if (demoPrev === null) { return pick(THROWS); }
     if (Math.random() < 0.15) { return demoPrev; }
@@ -403,14 +366,13 @@
   function demoTick() {
     demoTimer = null;
     if (demoStopped) { return; }
-    if (document.hidden) { return; } // the visibilitychange handler resumes
+    if (document.hidden) { return; } // resumed on visibilitychange
 
     demoPrev = demoThrow();
     playRound(demoGame, demoPrev);
 
-    // Deliberately no renderResult and no renderVerdict. The result line is a
-    // polite live region that must not narrate a demo round every 900ms, and
-    // the verdict addresses a visitor who is not playing yet.
+    // No result or verdict for demo rounds. The result line is a live region,
+    // so screen readers would announce every one.
     renderStats();
     renderChain();
 
@@ -423,11 +385,10 @@
     if (demoStartTimer !== null) { clearTimeout(demoStartTimer); demoStartTimer = null; }
     if (demoTimer !== null) { clearTimeout(demoTimer); demoTimer = null; }
     if (demoNote) { demoNote.hidden = true; }
-    active = liveGame; // Handover: zero everywhere by construction, not cleanup.
+    active = liveGame;
   }
 
-  // The demo waits two seconds so the page can settle first. With reduced
-  // motion it never runs at all: the grid sits empty until a real click.
+  // Start the demo after two seconds. It doesn't run at all with reduced motion.
   demoStartTimer = setTimeout(function () {
     demoStartTimer = null;
     if (demoStopped) { return; }
@@ -437,8 +398,7 @@
     demoTick();
   }, 2000);
 
-  // A background tab should not burn a timer for an hour. Pause while hidden,
-  // resume on return, unless the demo has already been stopped.
+  // Pause the demo while the tab is hidden.
   document.addEventListener('visibilitychange', function () {
     if (demoStopped || active !== demoGame) { return; }
     if (document.hidden) {

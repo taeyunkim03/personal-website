@@ -1,15 +1,4 @@
-/* ---------------------------------------------------------------------------
-   taeyunkim.netlify.app
-   Two themes, both driven entirely by the tokens below: the light palette on
-   :root, the dark overrides on [data-theme="dark"]. Nothing outside this block
-   should hard-code a colour, so a theme change never needs edits elsewhere.
-   theme.js sets data-theme before the first paint.
-   --------------------------------------------------------------------------- */
-
 :root {
-  /* Warm paper rather than cool grey. The greys are warmed to match: a cool
-     border or a pure-white card reads as a mistake against cream. The blue
-     accent stays, since blue on cream is the pairing this look is built on. */
   --bg: #FAF5E9;
   --surface: #FFFCF4;
   --surface-high: #F0E8D4;
@@ -21,10 +10,7 @@
   --accent-tint: #E4EEF3;
   --accent-warm: #A6432A;
 
-  /* Markov grid. Warm ramp = what the model has learned; --grid-live = where
-     you are right now: the ring, the marker dot and the recency trail. It is
-     the same red in both themes on purpose, since the cells it sits on stay
-     light in both. Blue is left meaning exactly one thing: interactive. */
+  /* Markov grid. --grid-live marks the current state and the trail. */
   --grid-0: #F1EEE8;
   --grid-1: #E5DDCE;
   --grid-2: #D2C4AC;
@@ -34,8 +20,8 @@
   --grid-edge: #A89372;
   --grid-live: #D93A2B;
 
-  /* The ground every figure is printed on. Fixed in both themes on purpose:
-     the plots themselves are drawn on white. */
+  /* Behind the project figures. The same in both themes since the plots are
+     drawn on white. */
   --figure-paper: #FCFCFA;
 
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
@@ -49,8 +35,7 @@
   color-scheme: light;
 }
 
-/* Dark theme. Near-black grounds, and the accent lightened so it keeps its
-   contrast against them: the light-mode blue is far too dark to read here. */
+/* Dark theme */
 [data-theme="dark"] {
   --bg: #14171A;
   --surface: #1B1F23;
@@ -63,8 +48,7 @@
   --accent-tint: #1E2C36;
   --accent-warm: #E39074;
 
-  /* The grid ramp does not invert: cells stay in the light zone so the grid
-     reads as a pale block, and the dark #24282C label works at every level. */
+  /* Grid cells stay light in dark mode so the dark labels stay readable. */
   --grid-0: #EBE9E4;
   --grid-1: #DCD4C4;
   --grid-2: #C8B99C;
@@ -84,7 +68,7 @@
   }
 }
 
-/* Base ------------------------------------------------------------------- */
+/* Base */
 
 *,
 *::before,
@@ -132,8 +116,6 @@ h2 {
   font-size: 1.25rem;
 }
 
-/* The three section headings are peers and are sized in one place. Setting
-   each of them independently is how they drifted apart. */
 .section-title {
   font-family: var(--font-serif);
   font-size: 1.75rem;
@@ -184,14 +166,11 @@ button {
   color: var(--text-dim);
 }
 
-/* Key terms in prose. Warm on purpose: the blue accent means "link" on this
-   site, and these are not links. Links also carry an underline, which is the
-   cue that keeps the two apart for anyone who does not separate them by hue. */
+/* Highlighted terms. Not blue, since blue means a link here. */
 .term {
   color: var(--accent-warm);
 }
 
-/* One focus treatment for everything that can take focus. */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -212,7 +191,7 @@ button {
   }
 }
 
-/* Skip link --------------------------------------------------------------- */
+/* Skip link */
 
 .skip {
   position: absolute;
@@ -230,7 +209,7 @@ button {
   top: 16px;
 }
 
-/* Nav --------------------------------------------------------------------- */
+/* Nav */
 
 .nav {
   display: flex;
@@ -247,10 +226,7 @@ button {
   text-decoration: none;
 }
 
-/* The homepage drops the corner link: the h1 right below it already carries the
-   name, and a second link to "/" in the same header earns nothing. With nothing
-   on the left, the row aligns right rather than leaning on .nav-home's auto
-   margin to push it there. */
+/* The homepage has no name link on the left, so push the rest right. */
 .nav-bare {
   justify-content: flex-end;
 }
@@ -259,7 +235,7 @@ button {
   color: var(--text);
 }
 
-/* The checkbox is the no-JavaScript menu switch. Hidden but still focusable. */
+/* Hidden checkbox that opens the mobile menu without JavaScript. */
 .nav-toggle {
   position: absolute;
   width: 1px;
@@ -361,11 +337,9 @@ button {
   }
 }
 
-/* Theme toggle ------------------------------------------------------------ */
+/* Theme toggle */
 
-/* Hidden by default: without JavaScript the button cannot do anything, and a
-   dead control is worse than no control. theme.js adds .js to <html> before
-   the first paint, so this never flashes in or shifts the layout. */
+/* Only shown when JavaScript is on. theme.js adds .js to <html>. */
 .theme-toggle {
   display: none;
 }
@@ -388,7 +362,7 @@ button {
   color: var(--text);
 }
 
-/* Each theme shows the icon for the theme it would switch to. */
+/* Show the icon for the theme it switches to. */
 .theme-toggle .icon-sun {
   display: none;
 }
@@ -407,7 +381,7 @@ button {
   }
 }
 
-/* Intro ------------------------------------------------------------------- */
+/* Intro */
 
 .intro {
   display: flex;
@@ -420,8 +394,7 @@ button {
 
 .photo {
   flex-shrink: 0;
-  /* 128 here would be 47% of a 320px column, where the intro stacks and
-     centres, and the photo starts outweighing the name beside it. */
+  /* Smaller on phones so the photo doesn't overpower the name. */
   width: 112px;
   height: 112px;
   border-radius: 50%;
@@ -435,33 +408,19 @@ button {
   line-height: 1.45;
 }
 
-/* Two classes deep so it outranks `.intro-text p`, and both margins are set:
-   adjacent vertical margins collapse to the larger one, so a 12px top alone
-   would lose to whatever the paragraph above declares. Same face and size as
-   the paragraph above it, since it is the same voice rather than a caption. */
+/* Two classes so it beats .intro-text p. */
 .intro-text .intro-line {
   margin-top: 12px;
   margin-bottom: 24px;
 }
 
-/* Intro line reveal ------------------------------------------------------- */
-
-/* The intro paragraph arrives a beat after the page settles, one word at a
-   time. Pure CSS: the site works without JavaScript except the game.
-
-   .reveal sits on the <p> itself, so every word span is a direct child. The
-   two coloured terms carry .term on the word spans rather than a wrapper,
-   which would push them out of reach of the child selector below.
-
-   The words carry no static opacity, so their resting state is fully opaque.
-   Only the animation moves them from transparent to opaque, which means a
-   browser that drops the rule still renders the sentence normally. */
+/* Intro line reveal. The words have no opacity of their own, so the sentence
+   still shows if the animation doesn't run. */
 
 @media (prefers-reduced-motion: no-preference) {
   .reveal > span {
     display: inline-block;
-    /* both holds the transparent first frame through the delay: that pause is
-       the effect. */
+    /* both keeps the words hidden during the delay. */
     animation: word-in 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: calc(600ms + var(--i) * 50ms);
   }
@@ -513,7 +472,7 @@ button {
   }
 }
 
-/* Game -------------------------------------------------------------------- */
+/* Game */
 
 .game {
   margin-top: var(--section);
@@ -568,17 +527,12 @@ button {
 }
 
 .game-result {
-  /* Holds one line once there is a result, so the grid does not jump between
-     rounds. Both margins are explicit: the inherited 1em bottom margin is
-     larger than the grid's top margin, and adjacent margins collapse to the
-     larger one, so leaving it would quietly win. */
+  /* Reserve a line so the grid doesn't jump between rounds. */
   min-height: 1.65em;
   margin: 16px 0 12px;
 }
 
-/* Before the first round this line has nothing in it, and reserving a full
-   line there leaves a visible hole between the hint and the grid. Collapse it
-   until there is something to say. */
+/* No empty gap before the first round. */
 .game-result:empty {
   min-height: 0;
   margin: 0;
@@ -650,19 +604,7 @@ button {
   }
 }
 
-/* Markov chain grid ------------------------------------------------------- */
-
-/* Nine two-throw states drawn as isometric blocks. Row is the older throw,
-   column the newer one, so the column you are in is always the row you move to.
-
-   Block height encodes how often you have landed in that state, which is the
-   same number the fill ramp carries: the silhouette shows your bias before you
-   read a single label. A single layer has no interior, so unlike a 3x3x3 cube
-   no block can ever hide another one's top face.
-
-   Colours come from the --grid-* tokens. game.js writes fills as var()
-   references, so toggling the theme recolours the whole grid live, mid-game,
-   without a render call. */
+/* Markov chain grid */
 
 .demo-note {
   margin: 12px 0 0;
@@ -675,8 +617,6 @@ button {
   display: block;
   width: 100%;
   max-width: 320px;
-  /* Matches the 12px below the grid, so it sits evenly between the result line
-     and the stats rather than floating. */
   margin: 12px auto 0;
 }
 
@@ -686,9 +626,8 @@ button {
   stroke-linejoin: round;
 }
 
-/* Visited recently, but not where the marker is now. Only the top face is
-   outlined: stroking all three would put three times the red on screen that
-   the flat grid used to, and it would compete with the current state. */
+/* Recently visited. Only the top face is outlined so it doesn't compete with
+   the current state. */
 .chain-block.is-trail .face-top {
   stroke: var(--grid-live);
   stroke-opacity: 0.4;
@@ -716,7 +655,6 @@ button {
   stroke-linejoin: round;
 }
 
-/* The arrowhead is part of the edge, so it follows the edge colour. */
 #chain-arrow path {
   fill: var(--grid-edge);
 }
@@ -725,10 +663,7 @@ button {
   fill: var(--grid-live);
 }
 
-/* Motion is opt-out: with reduced motion the grid still updates, instantly.
-   `d` is animatable in current browsers and is what makes a block grow rather
-   than jump when it crosses a band; where it is not supported the height
-   simply snaps while the fill still fades. */
+/* Animating d makes blocks grow smoothly. Browsers that can't just snap. */
 @media (prefers-reduced-motion: no-preference) {
   .face {
     transition: fill 400ms ease, d 400ms ease, stroke 200ms ease,
@@ -744,7 +679,7 @@ button {
   }
 }
 
-/* Now --------------------------------------------------------------------- */
+/* Now */
 
 .now {
   margin-top: var(--section);
@@ -770,13 +705,10 @@ button {
   margin-bottom: 8px;
 }
 
-/* Latent space ------------------------------------------------------------ */
+/* Latent space */
 
-/* Revealed by the `js` class theme.js puts on <html> synchronously in <head>,
-   not by cloud.js afterwards. Deferred JS reveals it after first paint, and
-   with this section sitting second the reveal shoved three sections and the
-   footer down: 0.6 of layout shift. This way the space is reserved from the
-   first render, and without JavaScript the section still never appears. */
+/* Shown by the .js class, which theme.js sets before the first paint, so the
+   page doesn't jump when the section appears. */
 .latent {
   display: none;
   margin-top: var(--section);
@@ -790,16 +722,13 @@ button {
   display: block;
 }
 
-/* Must come after the .latent rule above: a media query adds no specificity,
-   so declared earlier it would simply lose to the 24px base. */
 @media (min-width: 640px) {
   .latent {
     padding: 32px;
   }
 }
 
-/* Holds the SVG's shape before it paints, so a tooltip appearing or a label
-   changing never reflows the page. The panel itself is now .latent. */
+/* Reserves the SVG's space before it draws. */
 .latent-canvas {
   margin-top: 12px;
   aspect-ratio: 560 / 364;
@@ -811,9 +740,7 @@ button {
   height: 100%;
   cursor: grab;
   font-family: var(--font-sans);
-  /* pan-y rather than none: this block fills most of a phone screen, and with
-     none a vertical swipe over it rotates the cloud instead of scrolling, so a
-     visitor gets stuck. Vertical rotation on touch is the right thing to lose. */
+  /* pan-y so a vertical swipe still scrolls the page on phones. */
   touch-action: pan-y;
 }
 
@@ -854,14 +781,13 @@ button {
   }
 }
 
-/* Labels cross-fade; with motion reduced they appear and disappear at once. */
 @media (prefers-reduced-motion: no-preference) {
   .cloud-label {
     transition: opacity 250ms ease;
   }
 }
 
-/* Footer ------------------------------------------------------------------ */
+/* Footer */
 
 .footer {
   margin-top: var(--section);
@@ -880,7 +806,7 @@ button {
   margin: 0;
 }
 
-/* Icon-only links: 44px box so the tap target is bigger than the 20px glyph. */
+/* 44px tap target around the icon. */
 .footer .links a {
   display: flex;
   align-items: center;
@@ -896,7 +822,7 @@ button {
   color: var(--accent);
 }
 
-/* Page title (cv, projects) ---------------------------------------------- */
+/* Page title (cv, projects) */
 
 .page-title {
   margin-top: 24px;
@@ -908,11 +834,7 @@ button {
   }
 }
 
-/* CV ---------------------------------------------------------------------- */
-
-/* Every colour here is a token, so the page follows the theme without a second
-   palette. The panel sits on --surface in both themes: in dark it reads as a
-   lifted document rather than flipping to a white sheet. */
+/* CV */
 
 .cv-download {
   margin-top: 16px;
@@ -934,8 +856,6 @@ button {
   line-height: 1.2;
 }
 
-/* Fixed whitespace between the links rather than punctuation, and it wraps
-   rather than overflowing on a narrow screen. */
 .cv-contact {
   display: flex;
   flex-wrap: wrap;
@@ -959,8 +879,7 @@ button {
   border-bottom: 1px solid var(--border);
 }
 
-/* One grid for every section body. Single column first, so on a narrow screen
-   the date sits above its entry. */
+/* Date above the entry on phones, beside it on wider screens. */
 .cv-row {
   display: grid;
   grid-template-columns: 1fr;
@@ -968,9 +887,7 @@ button {
   margin-bottom: 18px;
 }
 
-/* Sections where every row is one short line do not need the breathing room a
-   multi-line entry does. Declared before the :last-child reset below, which has
-   equal specificity and would otherwise stop winning for the final row. */
+/* Has to come before .cv-row:last-child so that rule still wins. */
 .cv-section-compact .cv-row {
   margin-bottom: 8px;
 }
@@ -998,8 +915,7 @@ button {
   margin-bottom: 0;
 }
 
-/* Two classes deep on purpose: `.cv-entry p` would otherwise outrank a bare
-   class selector and these would never take effect. */
+/* Two classes so these beat .cv-entry p. */
 .cv-entry .cv-title {
   font-size: 15px;
   font-weight: 500;
@@ -1017,7 +933,7 @@ button {
   font-weight: 500;
 }
 
-/* A DOI has no spaces to break at, so it has to be allowed to break anywhere. */
+/* Let long DOIs break anywhere. */
 .cv-doi {
   overflow-wrap: anywhere;
 }
@@ -1048,22 +964,18 @@ button {
   }
 }
 
-/* Projects ---------------------------------------------------------------- */
+/* Projects */
 
 .projects {
   margin-top: 16px;
 }
 
-/* Figure and text side by side, alternating down the page. Single column
-   first: below 640px the figure sits on top and the alternation stops. */
 .project {
   padding: 32px 0;
   border-top: 1px solid var(--border);
 }
 
-/* The figure and the text sit side by side; the title above spans both, so a
-   long title is not squeezed into a half-width column and the figure lines up
-   with the paragraph rather than the heading. */
+/* Figure above the text on phones, side by side on wider screens. */
 .project-main {
   display: flex;
   flex-direction: column;
@@ -1076,15 +988,11 @@ button {
   border-top: 0;
 }
 
-/* The entry with no figure. Full width rather than a column left empty. */
+/* Project without a figure. */
 .project-wide .project-main {
   display: block;
 }
 
-/* Plots and screenshots are drawn on white. They keep a light ground in both
-   themes instead of inheriting --surface, so on the dark page they read as a
-   figure printed on paper rather than a hole punched through it. Inverting or
-   filtering them would misreport what the plots actually show. */
 .project-figure a {
   display: block;
   padding: 10px;
@@ -1093,9 +1001,6 @@ button {
   border-radius: 4px;
 }
 
-/* Aspect ratios run from 1.25:1 to 3.33:1. Each keeps its own height rather
-   than being cropped or letterboxed to a shared ratio, so rows differ in
-   height by design. */
 .project-figure img {
   display: block;
   width: 100%;
@@ -1134,14 +1039,12 @@ button {
   line-height: 1.65;
 }
 
-/* No leading margin, so the first line of the paragraph starts level with the
-   top of the figure beside it. */
+/* So the text lines up with the top of the figure. */
 .project-body p:first-child {
   margin-top: 0;
 }
 
-/* Two classes deep so it outranks `.project-body p`, which would otherwise
-   win on specificity and hold these at 14px. */
+/* Two classes so it beats .project-body p. */
 .project-body .project-tools {
   font-size: 13.5px;
   color: var(--text-dim);
@@ -1171,10 +1074,7 @@ button {
     flex: 0 0 320px;
   }
 
-  /* The text column is only about 360px once the figure takes its 260, so a
-     long title would push the year onto its own line. Letting the title wrap
-     inside its own box instead keeps the year pinned right, on the baseline of
-     the first line. Below 640px the wrap above still applies. */
+  /* Keep the year on the first line and let long titles wrap instead. */
   .project-head {
     flex-wrap: nowrap;
   }
@@ -1185,14 +1085,14 @@ button {
   }
 }
 
-/* Print ------------------------------------------------------------------- */
+/* Print */
 
 @media print {
   @page {
     margin: 2cm;
   }
 
-  /* Paper is white whichever theme is on screen, so force the light tokens. */
+  /* Always print with the light colors. */
   :root,
   [data-theme="dark"] {
     --bg: #FFFFFF;
@@ -1244,8 +1144,7 @@ button {
     border-radius: 0;
   }
 
-  /* page-break-inside for older print engines, break-inside for current ones,
-     so a bullet list never splits across a page. */
+  /* page-break-inside is for older browsers. */
   .cv-row,
   .project {
     page-break-inside: avoid;
