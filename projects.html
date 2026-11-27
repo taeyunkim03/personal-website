@@ -53,6 +53,28 @@
 
       <article class="project">
         <div class="project-head">
+          <h2>Conformal Prediction Under Batch and Technology Shift</h2>
+          <p class="project-year">2026</p>
+        </div>
+        <div class="project-main">
+          <div class="project-figure">
+            <a href="https://github.com/taeyunkim03/Classwise-Conformal-Batch-Shift" target="_blank" rel="noopener">
+              <img src="/assets/figures/conformal-coverage.png" width="1280" height="840" loading="lazy"
+                   alt="Coverage for each held-out batch, overall and for the worst common cell type, against a 90% target">
+            </a>
+          </div>
+          <div class="project-body">
+            <p>Tested whether classwise conformal prediction still gives reliable cell-type labels when new data come from a different batch or sequencing technology. Holding out seven batches of a human pancreas benchmark one at a time, overall coverage stayed near the 90% target even though each held-out batch was almost perfectly separable from the training data. Individual cell types fell as low as 81%. Set out to build a fix and found the real problem was narrower than expected.</p>
+            <p class="project-tools">Python, scikit-learn, Scanpy, Harmony</p>
+            <ul class="project-links">
+              <li><a href="https://github.com/taeyunkim03/Classwise-Conformal-Batch-Shift" target="_blank" rel="noopener">Code</a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="project-head">
           <h2>GPU-Accelerated Single-Cell RNA-seq Pipeline</h2>
           <p class="project-year">2025–26</p>
         </div>
@@ -74,6 +96,25 @@
       </article>
 
       <article class="project">
+        <div class="project-head">
+          <h2>bulkTRACC - bulk TRim, Align, Count, Check</h2>
+          <p class="project-year">2026</p>
+        </div>
+        <div class="project-main">
+          <div class="project-figure">
+            <a href="/assets/figures/bulktracc-results.png">
+              <img src="/assets/figures/bulktracc-results.png" width="978" height="638" loading="lazy"
+                   alt="bulkTRACC results page showing a finished project with a verified count matrix and QC reports">
+            </a>
+          </div>
+          <div class="project-body">
+            <p>A desktop app that lets labmates turn raw bulk RNA-seq reads into count matrices without touching the command line. It wraps the lab's trimming, alignment and counting pipeline, submits each step as a Slurm job on UW's Hyak cluster, and tracks every sample, so the window can be closed and reopened mid-run. Built-in checks verify read pairing, strandedness and sample order, and flag problem samples in plain language. Its count matrices matched the original command-line pipeline exactly, and labmates now run it themselves.</p>
+            <p class="project-tools">Python, Tkinter, Slurm, fastp, STAR, featureCounts</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="project project-wide">
         <div class="project-head">
           <h2>Memory, Stability, and Chaos in Reservoir Computing</h2>
           <p class="project-year">2026</p>
@@ -97,6 +138,28 @@
 
       <article class="project">
         <div class="project-head">
+          <h2>Likelihood and Bayesian Inference for COVID-19 Vaccine Efficacy</h2>
+          <p class="project-year">2026</p>
+        </div>
+        <div class="project-main">
+          <div class="project-figure">
+            <a href="/assets/covid_vaccine_efficacy.pdf">
+              <img src="/assets/figures/covid-prior-posterior.png" width="1100" height="820" loading="lazy"
+                   alt="A pessimistic prior distribution and the much narrower posterior it produced">
+            </a>
+          </div>
+          <div class="project-body">
+            <p>Re-analyzed the Pfizer BNT162b2 trial data two ways. The likelihood approach put efficacy at 95.1%, matching the published result. A deliberately pessimistic Bayesian prior, one starting from the assumption that the vaccine does nothing, still produced a posterior median of 75.2% and placed the entire posterior above the FDA's 30% threshold. The point was to see whether the conclusion survives a skeptical starting position.</p>
+            <p class="project-tools">R, Bayesian statistics, Beta-binomial conjugacy, parametric bootstrap, likelihood ratio test</p>
+            <ul class="project-links">
+              <li><a href="/assets/covid_vaccine_efficacy.pdf">Paper</a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="project project-wide">
+        <div class="project-head">
           <h2>Generalizability of Sentiment-Based Stock Market Prediction</h2>
           <p class="project-year">2026</p>
         </div>
@@ -117,23 +180,38 @@
         </div>
       </article>
 
-      <article class="project">
+      <!-- Full width: the figure is too wide for the side column. -->
+      <article class="project project-wide">
         <div class="project-head">
-          <h2>Likelihood and Bayesian Inference for COVID-19 Vaccine Efficacy</h2>
+          <h2>Fitting a Neuron Model to Retinal Recordings</h2>
           <p class="project-year">2026</p>
         </div>
         <div class="project-main">
           <div class="project-figure">
-            <a href="/assets/covid_vaccine_efficacy.pdf">
-              <img src="/assets/figures/covid-prior-posterior.png" width="1100" height="820" loading="lazy"
-                   alt="A pessimistic prior distribution and the much narrower posterior it produced">
+            <a href="/assets/figures/nurp-filter-fit.png">
+              <img src="/assets/figures/nurp-filter-fit.png" width="1189" height="296" loading="lazy"
+                   alt="Fitted stimulus filter compared with the spike-triggered average">
             </a>
           </div>
           <div class="project-body">
-            <p>Re-analyzed the Pfizer BNT162b2 trial data two ways. The likelihood approach put efficacy at 95.1%, matching the published result. A deliberately pessimistic Bayesian prior, one starting from the assumption that the vaccine does nothing, still produced a posterior median of 75.2% and placed the entire posterior above the FDA's 30% threshold. The point was to see whether the conclusion survives a skeptical starting position.</p>
-            <p class="project-tools">R, Bayesian statistics, Beta-binomial conjugacy, parametric bootstrap, likelihood ratio test</p>
+            <p>Fit a leaky integrate-and-fire model to recordings from a primate retinal ganglion cell by maximum likelihood. The fitted stimulus filter closely tracked the spike-triggered average (r = 0.80), peaking about 8 ms later, consistent with the delay from the model's membrane integration. Part of a quarter-long reading program on how the retina encodes light.</p>
+            <p class="project-tools">Python, NumPy, SciPy, maximum likelihood</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- No figure for this one. -->
+      <article class="project project-wide">
+        <div class="project-head">
+          <h2>Statistical Foundations of Machine Translation and LLMs</h2>
+          <p class="project-year">2026</p>
+        </div>
+        <div class="project-main">
+          <div class="project-body">
+            <p>Worked through the statistics behind machine translation and large language models with a graduate student mentor, from n-gram models and maximum likelihood estimation to attention and the Transformer. Built a sequence-to-sequence translation model in Python along the way.</p>
+            <p class="project-tools">Python, probability, language models</p>
             <ul class="project-links">
-              <li><a href="/assets/covid_vaccine_efficacy.pdf">Paper</a></li>
+              <li><a href="https://spa-drp.github.io/past-projects/2026-winter/#:~:text=Tony%20Lei%3A%20Statistical,Student%3A%20Taeyun%20Kim" target="_blank" rel="noopener">Slides and writeup</a></li>
             </ul>
           </div>
         </div>

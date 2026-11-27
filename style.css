@@ -989,6 +989,16 @@ button {
   border-top: 0;
 }
 
+/* Full-width entry: text only, or a figure above the text at every width. */
+.project-wide .project-main {
+  display: block;
+}
+
+/* Block layout has no flex gap, so match the 16px the stacked layout uses. */
+.project-wide .project-figure {
+  margin-bottom: 16px;
+}
+
 .project-figure a {
   display: block;
   padding: 10px;
@@ -1060,10 +1070,6 @@ button {
   .project-main {
     flex-direction: row;
     gap: 24px;
-  }
-
-  .project:nth-child(even) .project-main {
-    flex-direction: row-reverse;
   }
 
   .project-figure {
