@@ -48,37 +48,74 @@
 
   <main id="main" class="wrap">
 
-    <!-- Uncomment once assets/resume.pdf exists. -->
-    <!-- <p class="cv-download"><a href="/assets/resume.pdf" download>Download as PDF</a></p> -->
+    <p class="cv-download"><a href="/TaeyunKim_CV.pdf" download>Download PDF</a></p>
 
     <article class="cv-panel">
       <header class="cv-header">
         <h1>Taeyun Kim</h1>
         <p class="cv-contact">
-          <a href="mailto:taeyun.kim03@outlook.com">Email</a>
-          <a href="https://www.linkedin.com/in/taeyun-kim" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://github.com/taeyunkim03" target="_blank" rel="noopener">GitHub</a>
+          <a href="mailto:tkim215@uw.edu">tkim215@uw.edu</a>
           <a href="https://orcid.org/0009-0009-3051-6597" target="_blank" rel="noopener">ORCID</a>
+          <a href="https://github.com/taeyunkim03" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/taeyun-kim" target="_blank" rel="noopener">LinkedIn</a>
         </p>
       </header>
 
       <section class="cv-section" aria-labelledby="cv-education">
         <h2 id="cv-education">Education</h2>
         <div class="cv-row">
-          <p class="cv-date">Sep 2021 – Jun 2027</p>
+          <p class="cv-date">Expected Jun 2027</p>
           <div class="cv-entry">
-            <p class="cv-title">University of Washington, Seattle, WA</p>
-            <p>Bachelor of Science, Statistics - Data Science</p>
-            <p>Minor in Applied Mathematics and Informatics</p>
-            <p><span class="cv-dim">GPA 3.75 / 4.0. Annual Dean’s List, 2024–2025.</span></p>
+            <p class="cv-title">B.S., Statistics (Data Science), Minors in Applied Mathematics and Informatics</p>
+            <p class="cv-org">University of Washington, Seattle, WA</p>
+            <p><span class="cv-dim">GPA 3.75/4.00</span></p>
           </div>
         </div>
         <div class="cv-row">
-          <p class="cv-date">Jul 2026</p>
+          <p class="cv-date">Statistics</p>
           <div class="cv-entry">
-            <p class="cv-title">AI in Practice Summer Institute</p>
-            <p class="cv-org">UW eScience Institute</p>
-            <p>Foundation models, scaling, and the training and evaluation of deep networks for vision and language.</p>
+            <p>Statistical Machine Learning, Generalized Linear Models, Applied Regression and ANOVA, Probability and Mathematical Statistics II–III, Statistical Computing, Ethics of Algorithmic Decision Making</p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Mathematics</p>
+          <div class="cv-entry">
+            <p>Matrix Algebra, Advanced Multivariable Calculus, Differential Equations, Introduction to Mathematical Reasoning, Continuous Mathematical Modeling, Scientific Computing</p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Computing</p>
+          <div class="cv-entry">
+            <p>Data Structures and Algorithms, Database Systems, Data Visualization</p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Summer 2022, 2024</p>
+          <div class="cv-entry">
+            <p class="cv-title">International Summer School, Visiting Student</p>
+            <p class="cv-org">Yonsei University, Seoul, South Korea</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cv-section cv-section-compact" aria-labelledby="cv-interests">
+        <h2 id="cv-interests">Research Interests</h2>
+        <div class="cv-row">
+          <p class="cv-date">Bioinformatics</p>
+          <div class="cv-entry">
+            <p>Statistical methods for single-cell genomics, including reference atlases, batch integration, and cross-species cell-type annotation</p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Statistics</p>
+          <div class="cv-entry">
+            <p>Uncertainty quantification and conformal prediction under distribution shift</p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Machine Learning</p>
+          <div class="cv-entry">
+            <p>Deep generative models for high-dimensional data</p>
           </div>
         </div>
       </section>
@@ -88,47 +125,80 @@
         <div class="cv-row">
           <p class="cv-date">Sep 2025 – Present</p>
           <div class="cv-entry">
-            <p class="cv-title">Bioinformatics and Data Science Research Assistant</p>
-            <p class="cv-org">UW Medicine, Department of Obstetrics and Gynecology, Adams Waldorf Lab</p>
+            <p class="cv-title">Adams Waldorf Lab, Department of Obstetrics and Gynecology, UW Medicine</p>
+            <p class="cv-org">Bioinformatics Research Assistant</p>
+            <p class="cv-org">Seattle, WA (Dr. Kristina M. Adams Waldorf)</p>
             <ul>
-              <li>Led the performance optimization of a high-throughput single-cell RNA-seq pipeline, migrating it from CPU to GPU with CellBender, RAPIDS and scVI/scANVI, and cutting runtime fifteenfold while preserving annotation quality.</li>
-              <li>Applied deep generative models, dimensionality reduction and unsupervised clustering to high-dimensional datasets spanning tens of thousands of cells.</li>
-              <li>Built Python workflows for quality control, doublet detection, batch integration, clustering and cross-species label transfer against human reference atlases.</li>
-              <li>Authored the lab’s bioinformatics standard operating procedures and an onboarding tutorial now used to train incoming researchers.</li>
+              <li>Led the analysis for a single-cell transcriptomic atlas of the pigtail macaque lung as first author (preprint on bioRxiv)</li>
+              <li>Migrated the lab’s scRNA-seq pipeline, including scVI and scANVI model training, from CPU to GPU, cutting end-to-end runtime about 7x, with up to 15x on individual steps, while preserving annotation quality</li>
+              <li>Aligned H1N1 and H3N2 influenza infection scRNA-seq data with STARsolo on UW’s supercomputer, benchmarked STARsolo against Cell Ranger, and compared hybrid-reference and two-pass strategies for detecting viral reads</li>
+              <li>Built bulk RNA-seq pipelines and turned them into bulkTRACC, a GUI tool for the lab</li>
+              <li>Built Python workflows for quality control, doublet detection, clustering, and cross-species label transfer of placental cell types</li>
+              <li>Wrote 16 bioinformatics SOPs and comparative analysis reports, plus an onboarding tutorial for new lab members</li>
+            </ul>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Jun 2026 – Present</p>
+          <div class="cv-entry">
+            <p class="cv-title">Conformal Prediction for Single-Cell Cell-Type Annotation under Distribution Shift</p>
+            <p class="cv-org">Independent Project</p>
+            <p><a href="https://github.com/taeyunkim03/Classwise-Conformal-Batch-Shift">GitHub</a></p>
+            <ul>
+              <li>Tested whether classwise conformal prediction reaches its target coverage under batch and technology shift, holding out seven of nine batches (six technologies) of a human pancreas benchmark one at a time</li>
+              <li>Found that overall coverage stayed near target even though each held-out batch was almost perfectly separable from the training data (domain AUC 0.97 to 0.999), while some individual cell types fell short, and used a score-shift diagnostic to link this to conformal scores that barely shifted (score AUC about 0.5)</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-training">
+        <h2 id="cv-training">Research Training</h2>
+        <div class="cv-row">
+          <p class="cv-date">Jul 2026</p>
+          <div class="cv-entry">
+            <p class="cv-title">AI in Practice Summer Institute, eScience Institute, University of Washington</p>
+            <p class="cv-org">Participant</p>
+            <p class="cv-org">Seattle, WA</p>
+            <ul>
+              <li>Trained in foundation models, scaling, and training and evaluating deep neural networks</li>
+              <li>Compared AI models, including single-cell foundation models, for analyzing scRNA-seq data in a facilitated project</li>
             </ul>
           </div>
         </div>
         <div class="cv-row">
           <p class="cv-date">Apr 2026 – Jun 2026</p>
           <div class="cv-entry">
-            <p class="cv-title">Neuroscience Undergraduate Reading Program</p>
-            <p class="cv-org">NURP at UW</p>
+            <p class="cv-title">Neuroscience Undergraduate Reading Program, University of Washington</p>
+            <p class="cv-org">Participant</p>
+            <p class="cv-org">Seattle, WA (mentored by Rachel Oaks-Leaf)</p>
             <ul>
-              <li>Reviewed four papers spanning single-photon biophysics, probabilistic spiking models, population decoding and deep network models of the retina.</li>
-              <li>Built a stochastic leaky integrate-and-fire neuron model in Python and fit it to primate retinal ganglion cell recordings.</li>
-              <li>Recovered the temporal receptive field by maximum likelihood, matching the spike-triggered average at r = 0.80.</li>
+              <li>Reviewed primary literature on retinal coding, from single-photon responses in rods to population decoding and deep learning models of retinal ganglion cells</li>
+              <li>Built a leaky integrate-and-fire model in Python and fit it to primate retinal ganglion cell recordings by maximum likelihood, with the fitted stimulus filter matching the spike-triggered average (r = 0.80)</li>
             </ul>
           </div>
         </div>
         <div class="cv-row">
           <p class="cv-date">Apr 2026 – Jun 2026</p>
           <div class="cv-entry">
-            <p class="cv-title">NeuroAI Technical Track</p>
-            <p class="cv-org">Interactive Intelligence at UW</p>
+            <p class="cv-title">NeuroAI Technical Track, Interactive Intelligence, University of Washington</p>
+            <p class="cv-org">Participant</p>
+            <p class="cv-org">Seattle, WA</p>
             <ul>
-              <li>Completed i2’s NeuroAI technical track, covering backpropagation, convolutional networks, reinforcement learning and neuroanatomy.</li>
-              <li>Worked through the accompanying notebooks and reading, implementing the core algorithms rather than only studying them.</li>
+              <li>Completed neural network and computational neuroscience modules with hands-on implementation</li>
             </ul>
           </div>
         </div>
         <div class="cv-row">
           <p class="cv-date">Jan 2026 – Mar 2026</p>
           <div class="cv-entry">
-            <p class="cv-title">Statistics Directed Reading Program</p>
-            <p class="cv-org">Department of Statistics at UW</p>
+            <p class="cv-title">Statistics Directed Reading Program, Department of Statistics, University of Washington</p>
+            <p class="cv-org">Participant</p>
+            <p class="cv-org">Seattle, WA (mentored by Tony Lei)</p>
+            <p><a href="https://spa-drp.github.io/past-projects/2026-winter/">Project page</a></p>
             <ul>
-              <li>Worked through the statistical foundations of machine translation and large language models with a graduate mentor, covering n-gram models, maximum likelihood estimation, word embeddings and the transformer architecture.</li>
-              <li>Built a sequence-to-sequence translation model in Python and presented the findings to an academic audience.</li>
+              <li>Studied the statistical foundations of machine translation and large language models, from n-gram models and maximum likelihood estimation to the Transformer</li>
+              <li>Built a sequence-to-sequence translation model in Python and presented the work in a written report and a 10-minute talk</li>
             </ul>
           </div>
         </div>
@@ -137,59 +207,93 @@
       <section class="cv-section" aria-labelledby="cv-publications">
         <h2 id="cv-publications">Publications</h2>
         <div class="cv-row">
-          <p class="cv-date">Aug 2026</p>
+          <p class="cv-date">Peer-Reviewed Articles</p>
           <div class="cv-entry">
-            <p>Cornelius JA, Shivakumar M, <b class="cv-me">Kim T</b>, et al., Adams Waldorf KM. A single-cell transcriptomic atlas of the periventricular proliferative zone in the late gestation fetal brain in the pigtail macaque. <i>Frontiers in Neuroscience</i>, 20:1785001. <a class="cv-doi" href="https://doi.org/10.3389/fnins.2026.1785001">doi.org/10.3389/fnins.2026.1785001</a></p>
+            <p>Cornelius JA, Shivakumar M, <b class="cv-me">Kim T</b>, Cervantes O, Kapur RP, …, Adams Waldorf KM (2026). A single-cell transcriptomic atlas of the periventricular proliferative zone in the late gestation fetal brain in the pigtail macaque. <i>Frontiers in Neuroscience</i>, 20, 1785001. <a class="cv-doi" href="https://doi.org/10.3389/fnins.2026.1785001">doi.org/10.3389/fnins.2026.1785001</a></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date"></p>
+          <div class="cv-entry">
+            <p>Manuel G, Coler C, Munson J, Cornelius JA, Duell T, <b class="cv-me">Kim T</b>, …, Adams Waldorf KM (2026). Intra-amniotic inflammation can persist after resolution of intrauterine infection in pregnant macaques. <i>American Journal of Obstetrics and Gynecology</i> (in press). <a class="cv-doi" href="https://www.ajog.org/article/S0002-9378(26)00620-4/abstract">ajog.org/article/S0002-9378(26)00620-4</a></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Preprints</p>
+          <div class="cv-entry">
+            <p><b class="cv-me">Kim T</b>, Cornelius JA, Sindhu V, Duell T, Sun S, …, Adams Waldorf KM (2026). A single-cell transcriptomic atlas of the pigtail macaque lung. <i>bioRxiv</i>. <a class="cv-doi" href="https://doi.org/10.64898/2026.11.05.764748">doi.org/10.64898/2026.11.05.764748</a></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-presentations">
+        <h2 id="cv-presentations">Presentations</h2>
+        <div class="cv-row">
+          <p class="cv-date">Dec 2026</p>
+          <div class="cv-entry">
+            <p><b class="cv-me">Kim T</b>, Cornelius JA, Zhao H, Sun S, Duell T, Huang H, Del Rosario BM, Adams Waldorf KM. The pigtail macaque lung and immune single cell RNA-seq atlas. Poster presentation, 2026 WaNBRC Scientific Symposium, Seattle, WA. Dec 2026 (upcoming).</p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">May 2026</p>
+          <div class="cv-entry">
+            <p><b class="cv-me">Kim T</b>, Chima SC, Zhao H, Sun S, Vo AE, Duell T, Sindhu V, Murphy K, Cornelius JA, Adams Waldorf KM. Development of GPU-accelerated single-cell RNA-seq analysis pipeline. Poster presentation, 29th Annual Undergraduate Research Symposium, University of Washington, Seattle, WA. May 2026. <a href="https://event.fourwaves.com/uw-2026urs/abstracts/bd63a948-564d-455b-a6f9-bb8f6e9a55ed">Abstract</a> | <a href="https://taeyunkim.netlify.app/assets/gpu_scrnaseq_pipeline_poster.pdf">Poster</a></p>
           </div>
         </div>
       </section>
 
       <section class="cv-section" aria-labelledby="cv-leadership">
-        <h2 id="cv-leadership">Leadership and Service</h2>
+        <h2 id="cv-leadership">Leadership</h2>
         <div class="cv-row">
           <p class="cv-date">Dec 2025 – Present</p>
           <div class="cv-entry">
-            <p class="cv-title">Research Computing Club Officer</p>
-            <p class="cv-org">UW eScience Institute</p>
+            <p class="cv-title">Research Computing Club, eScience Institute, University of Washington</p>
+            <p class="cv-org">Officer</p>
+            <p class="cv-org">Seattle, WA</p>
             <ul>
-              <li>Run office hours resolving HPC and cloud platform issues for more than ten student and faculty researchers.</li>
-              <li>Administer access to UW’s Hyak and Tillicum clusters and cloud computing credits, and coordinate with campus partners and IBM on training sessions.</li>
+              <li>Run HPC and cloud office hours for student and faculty researchers</li>
+              <li>Administer access to the Hyak and Tillicum clusters and cloud credits, and coordinate training with campus partners and IBM</li>
             </ul>
           </div>
         </div>
         <div class="cv-row">
           <p class="cv-date">Jun 2025 – Jun 2026</p>
           <div class="cv-entry">
-            <p class="cv-title">Public Relations and Development Team Leader</p>
-            <p class="cv-org">KoJobs UW</p>
+            <p class="cv-title">Korean Job Search, University of Washington</p>
+            <p class="cv-org">Public Relations and Development Team Leader</p>
+            <p class="cv-org">Seattle, WA</p>
             <ul>
-              <li>Secured five corporate and institutional partnerships, including HiteJinro, H-Mart, Changbal and the Seattle Office of Korean Education.</li>
-              <li>Organized four career guidance sessions delivered to over 250 members.</li>
-              <li>Led a six-person team across project planning, task delegation and delivery timelines.</li>
-              <li>Improved the site’s UI and user experience, setting the organization’s UI standards.</li>
+              <li>Secured 5 corporate and institutional partnerships and organized 4 career sessions for more than 250 members</li>
+              <li>Led a six-person team and set the organization’s UI and UX standards for its <a href="https://kojobs.netlify.app/">website</a></li>
+              <li>Previously served as Team Officer (Sep 2024 – May 2025) and built the organization’s official website from the ground up</li>
             </ul>
           </div>
         </div>
         <div class="cv-row">
-          <p class="cv-date">Sep 2024 – May 2025</p>
+          <p class="cv-date">Apr 2026</p>
           <div class="cv-entry">
-            <p class="cv-title">Public Relations and Development Team Officer</p>
-            <p class="cv-org">KoJobs UW</p>
+            <p class="cv-title">Seattle Office of Korean Education</p>
+            <p class="cv-org">Student Volunteer Lead</p>
+            <p class="cv-org">Bellevue, WA</p>
             <ul>
-              <li>Built the organization’s official website from the ground up, establishing its structure and design.</li>
-              <li>Worked with the team to organize career guidance sessions with professionals across a range of industries.</li>
+              <li>Led student volunteers for the 2026 Study in Korea College Fair, working with office staff through planning and on-site execution</li>
             </ul>
           </div>
         </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-military">
+        <h2 id="cv-military">Military Service</h2>
         <div class="cv-row">
           <p class="cv-date">Dec 2022 – Jun 2024</p>
           <div class="cv-entry">
-            <p class="cv-title">Sergeant, Heavy Vehicle Operator</p>
-            <p class="cv-org">Republic of Korea Army, CBRN Battalion</p>
+            <p class="cv-title">CBRN Battalion, Republic of Korea Army</p>
+            <p class="cv-org">Sergeant, Heavy Vehicle Operator</p>
+            <p class="cv-org">South Korea</p>
             <ul>
-              <li>Built a structured data visualization system tracking maintenance status across the battalion’s heavy vehicle fleet, improving deployment decisions and unit readiness.</li>
-              <li>Led a team of eight soldiers through training programs, raising unit readiness by 24 percent in quarterly evaluation.</li>
-              <li>Authored and maintained standardized work instructions that reduced training time by 30 percent.</li>
+              <li>Built a data visualization system to track maintenance status across the battalion’s heavy vehicle fleet</li>
+              <li>Led a team of eight soldiers and raised unit readiness by 24% in quarterly evaluations</li>
+              <li>Wrote work instructions that cut training time by 30%</li>
             </ul>
           </div>
         </div>
@@ -206,137 +310,87 @@
         <div class="cv-row">
           <p class="cv-date">Mar 2026</p>
           <div class="cv-entry">
-            <p>Best Final Project Award, CSE 412 Data Visualization</p>
+            <p>Best Final Project Award, CSE 412 Data Visualization, University of Washington</p>
           </div>
         </div>
         <div class="cv-row">
-          <p class="cv-date">2024–2025</p>
+          <p class="cv-date">2024 – 2025</p>
           <div class="cv-entry">
             <p>Annual Dean’s List, University of Washington</p>
           </div>
         </div>
       </section>
 
-      <section class="cv-section cv-section-compact" aria-labelledby="cv-certifications">
-        <h2 id="cv-certifications">Certifications</h2>
-        <div class="cv-row">
-          <p class="cv-date">Aug 2026</p>
-          <div class="cv-entry">
-            <p>Biostatistics in Public Health <span class="cv-dim">· Johns Hopkins University</span></p>
-          </div>
-        </div>
-        <div class="cv-row">
-          <p class="cv-date">Aug 2026</p>
-          <div class="cv-entry">
-            <p>Advanced Statistics for Data Science <span class="cv-dim">· Johns Hopkins University</span></p>
-          </div>
-        </div>
-        <div class="cv-row">
-          <p class="cv-date">Aug 2026</p>
-          <div class="cv-entry">
-            <p>Google AI Professional Certificate <span class="cv-dim">· Google</span></p>
-          </div>
-        </div>
-        <div class="cv-row">
-          <p class="cv-date">Aug 2026</p>
-          <div class="cv-entry">
-            <p>Bloomberg Market Concepts <span class="cv-dim">· Bloomberg</span></p>
-          </div>
-        </div>
-        <div class="cv-row">
-          <p class="cv-date">Aug 2025</p>
-          <div class="cv-entry">
-            <p>Azure AI Fundamentals (AI-900) <span class="cv-dim">· Microsoft</span></p>
-          </div>
-        </div>
-        <div class="cv-row">
-          <p class="cv-date">Aug 2025</p>
-          <div class="cv-entry">
-            <p>Azure Data Fundamentals (DP-900) <span class="cv-dim">· Microsoft</span></p>
-          </div>
-        </div>
-        <div class="cv-row">
-          <p class="cv-date">Sep 2024</p>
-          <div class="cv-entry">
-            <p>SQL Developer (SQLD) <span class="cv-dim">· Korea Data Agency</span></p>
-          </div>
-        </div>
-        <div class="cv-row">
-          <p class="cv-date">Jun 2024</p>
-          <div class="cv-entry">
-            <p>Advanced Data Analytics Semi-Professional (ADsP) <span class="cv-dim">· Korea Data Agency</span></p>
-          </div>
-        </div>
-        <div class="cv-row">
-          <p class="cv-date">Jun 2020</p>
-          <div class="cv-entry">
-            <p>Python Basics for Data Science <span class="cv-dim">· IBM</span></p>
-          </div>
-        </div>
-      </section>
-
       <section class="cv-section" aria-labelledby="cv-skills">
-        <h2 id="cv-skills">Skills</h2>
+        <h2 id="cv-skills">Technical Skills</h2>
         <div class="cv-row">
-          <p class="cv-date">Programming languages</p>
+          <p class="cv-date">Programming Languages</p>
           <div class="cv-entry">
-            <p>Python, R, SQL, Java, MATLAB, JavaScript, HTML/CSS</p>
+            <p>Python, R, SQL, Java, JavaScript, Bash</p>
           </div>
         </div>
         <div class="cv-row">
-          <p class="cv-date">Libraries</p>
+          <p class="cv-date">Statistics and Machine Learning</p>
           <div class="cv-entry">
-            <p>NumPy, pandas, SciPy, scikit-learn, PyTorch, TensorFlow, XGBoost, Hugging Face Transformers, statsmodels, Matplotlib, seaborn, ggplot2, D3, Scanpy, scVI, scANVI, CellBender, Harmony, RAPIDS</p>
+            <p>NumPy, SciPy, pandas, scikit-learn, PyTorch, TensorFlow</p>
           </div>
         </div>
         <div class="cv-row">
-          <p class="cv-date">Tools and platforms</p>
+          <p class="cv-date">Bioinformatics</p>
           <div class="cv-entry">
-            <p>Linux, Bash, Git, GitHub, Docker, Conda, Azure, Hadoop, Tableau, Power BI, Overleaf, Nextflow, SLURM, HPC clusters, STARsolo, CellRanger, Partek, BLAST</p>
-          </div>
-        </div>
-        <div class="cv-row">
-          <p class="cv-date">Methods</p>
-          <div class="cv-entry">
-            <p>Single-cell and bulk RNA-seq analysis, batch integration, differential expression, generalized linear models, Bayesian inference, conformal prediction, hypothesis testing, experimental design</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="cv-section" aria-labelledby="cv-coursework">
-        <h2 id="cv-coursework">Selected Coursework</h2>
-        <div class="cv-row">
-          <p class="cv-date">Statistics</p>
-          <div class="cv-entry">
-            <p>Statistical Machine Learning, Generalized Linear Models, Applied Regression and ANOVA, Probability and Mathematical Statistics I–III, Statistical Computing, Elements of Statistical Methods</p>
-          </div>
-        </div>
-        <div class="cv-row">
-          <p class="cv-date">Mathematics</p>
-          <div class="cv-entry">
-            <p>Advanced Multivariable Calculus, Matrix Algebra, Differential Equations, Mathematical Reasoning, Continuous Mathematical Modeling, Scientific Computing</p>
+            <p>Scanpy, scvi-tools, STARsolo, Cell Ranger, CellBender, Seurat</p>
           </div>
         </div>
         <div class="cv-row">
           <p class="cv-date">Computing</p>
           <div class="cv-entry">
-            <p>Data Structures and Algorithms, Database Systems, Data Visualization, Intermediate Data Programming, Software Documentation</p>
+            <p>Linux, Slurm (HPC), GPU computing, Git, GitHub, Microsoft Azure, Docker, Anaconda, CUDA</p>
           </div>
         </div>
       </section>
 
-      <section class="cv-section cv-section-compact" aria-labelledby="cv-languages">
-        <h2 id="cv-languages">Spoken Languages</h2>
+      <section class="cv-section cv-section-compact" aria-labelledby="cv-certifications">
+        <h2 id="cv-certifications">Certifications and Certificates</h2>
         <div class="cv-row">
-          <p class="cv-date">Korean</p>
+          <p class="cv-date">Aug 2026</p>
           <div class="cv-entry">
-            <p>Native</p>
+            <p>Biostatistics in Public Health<span class="cv-dim">, Johns Hopkins University (Coursera)</span></p>
           </div>
         </div>
         <div class="cv-row">
-          <p class="cv-date">English</p>
+          <p class="cv-date">Aug 2026</p>
           <div class="cv-entry">
-            <p>Full professional proficiency</p>
+            <p>Advanced Statistics for Data Science<span class="cv-dim">, Johns Hopkins University (Coursera)</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Aug 2026</p>
+          <div class="cv-entry">
+            <p>Google AI Professional Certificate<span class="cv-dim">, Google (Coursera)</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Aug 2025</p>
+          <div class="cv-entry">
+            <p>Azure AI Fundamentals (AI-900)<span class="cv-dim">, Microsoft</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Aug 2025</p>
+          <div class="cv-entry">
+            <p>Azure Data Fundamentals (DP-900)<span class="cv-dim">, Microsoft</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Sep 2024</p>
+          <div class="cv-entry">
+            <p>SQL Developer (SQLD)<span class="cv-dim">, Korea Data Agency</span></p>
+          </div>
+        </div>
+        <div class="cv-row">
+          <p class="cv-date">Jun 2024</p>
+          <div class="cv-entry">
+            <p>Advanced Data Analytics Semi-Professional (ADsP)<span class="cv-dim">, Korea Data Agency</span></p>
           </div>
         </div>
       </section>
