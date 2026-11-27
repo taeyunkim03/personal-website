@@ -7,7 +7,7 @@
   <meta name="description" content="Taeyun Kim studies statistics and data science at the University of Washington and works on single-cell RNA sequencing pipelines in the Adams Waldorf Lab.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Taeyun Kim">
-  <meta property="og:description" content="Statistics and data science at the University of Washington. Single-cell RNA sequencing pipelines in the Adams Waldorf Lab, and a rock paper scissors bot that learns how you play.">
+  <meta property="og:description" content="Statistics and data science at the University of Washington. Single-cell RNA sequencing pipelines in the Adams Waldorf Lab.">
   <meta property="og:url" content="https://taeyunkim.netlify.app/">
   <meta property="og:site_name" content="Taeyun Kim">
   <meta property="og:image" content="https://taeyunkim.netlify.app/assets/og-image.png">
@@ -17,6 +17,15 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#FAF5E9">
   <script src="/theme.js"></script>
+  <script>
+  /* The game moved to the projects page. Send old /#game links there, on load
+     or when the hash changes without a reload. */
+  (function () {
+    function toGame() { if (location.hash === '#game') { location.replace('/projects.html#game'); } }
+    toGame();
+    window.addEventListener('hashchange', toGame);
+  })();
+  </script>
   <link rel="icon" href="/assets/stencil-light.png" type="image/png" sizes="512x512">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,112 +96,6 @@
       </div>
     </section>
 
-    <section class="game" id="game" aria-labelledby="game-title">
-      <h2 class="section-title" id="game-title">Can you beat a Markov chain?</h2>
-      <p>This bot has no strategy. It remembers your last two throws and plays whatever tends to beat you after that pattern.</p>
-
-      <!-- Hidden until game.js runs. -->
-      <div class="game-ui" id="game-ui" hidden>
-        <div class="throws" role="group" aria-label="Your throw">
-          <button type="button" class="throw-btn" data-throw="R">Rock</button>
-          <button type="button" class="throw-btn" data-throw="P">Paper</button>
-          <button type="button" class="throw-btn" data-throw="S">Scissors</button>
-        </div>
-        <p class="game-hint">Or press R, P or S.</p>
-
-        <p class="game-result" id="game-result" aria-live="polite"></p>
-
-        <!-- Only shown while the demo is running. -->
-        <p class="demo-note" id="demo-note" hidden>Demo running. Press a button to play.</p>
-
-
-        <svg class="chain" viewBox="0 0 300 200" width="100%" role="img"
-             aria-labelledby="chain-title" aria-describedby="chain-desc">
-          <title id="chain-title">The bot's model</title>
-          <desc id="chain-desc">Nine blocks, one per two-throw state. No rounds played yet.</desc>
-          <defs>
-            <marker id="chain-arrow" viewBox="0 0 8 8" refX="4" refY="4"
-                    markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto">
-              <path d="M0 0.5L7 4L0 7.5Z"/>
-            </marker>
-          </defs>
-          <!-- Edges first so they draw behind the blocks. -->
-          <g id="chain-edges">
-            <path class="chain-edge" id="edge-R" d="" marker-end="url(#chain-arrow)"/>
-            <path class="chain-edge" id="edge-P" d="" marker-end="url(#chain-arrow)"/>
-            <path class="chain-edge" id="edge-S" d="" marker-end="url(#chain-arrow)"/>
-          </g>
-          <g class="chain-block" id="cell-RR">
-            <path class="face face-left" id="left-RR" d=""/>
-            <path class="face face-right" id="right-RR" d=""/>
-            <path class="face face-top" id="top-RR" d=""/>
-            <text class="chain-label" id="label-RR" x="150" y="56">RR</text>
-          </g>
-          <g class="chain-block" id="cell-RP">
-            <path class="face face-left" id="left-RP" d=""/>
-            <path class="face face-right" id="right-RP" d=""/>
-            <path class="face face-top" id="top-RP" d=""/>
-            <text class="chain-label" id="label-RP" x="104" y="83">RP</text>
-          </g>
-          <g class="chain-block" id="cell-PR">
-            <path class="face face-left" id="left-PR" d=""/>
-            <path class="face face-right" id="right-PR" d=""/>
-            <path class="face face-top" id="top-PR" d=""/>
-            <text class="chain-label" id="label-PR" x="196" y="83">PR</text>
-          </g>
-          <g class="chain-block" id="cell-RS">
-            <path class="face face-left" id="left-RS" d=""/>
-            <path class="face face-right" id="right-RS" d=""/>
-            <path class="face face-top" id="top-RS" d=""/>
-            <text class="chain-label" id="label-RS" x="58" y="110">RS</text>
-          </g>
-          <g class="chain-block" id="cell-PP">
-            <path class="face face-left" id="left-PP" d=""/>
-            <path class="face face-right" id="right-PP" d=""/>
-            <path class="face face-top" id="top-PP" d=""/>
-            <text class="chain-label" id="label-PP" x="150" y="110">PP</text>
-          </g>
-          <g class="chain-block" id="cell-SR">
-            <path class="face face-left" id="left-SR" d=""/>
-            <path class="face face-right" id="right-SR" d=""/>
-            <path class="face face-top" id="top-SR" d=""/>
-            <text class="chain-label" id="label-SR" x="242" y="110">SR</text>
-          </g>
-          <g class="chain-block" id="cell-PS">
-            <path class="face face-left" id="left-PS" d=""/>
-            <path class="face face-right" id="right-PS" d=""/>
-            <path class="face face-top" id="top-PS" d=""/>
-            <text class="chain-label" id="label-PS" x="104" y="137">PS</text>
-          </g>
-          <g class="chain-block" id="cell-SP">
-            <path class="face face-left" id="left-SP" d=""/>
-            <path class="face face-right" id="right-SP" d=""/>
-            <path class="face face-top" id="top-SP" d=""/>
-            <text class="chain-label" id="label-SP" x="196" y="137">SP</text>
-          </g>
-          <g class="chain-block" id="cell-SS">
-            <path class="face face-left" id="left-SS" d=""/>
-            <path class="face face-right" id="right-SS" d=""/>
-            <path class="face face-top" id="top-SS" d=""/>
-            <text class="chain-label" id="label-SS" x="150" y="164">SS</text>
-          </g>
-          <circle class="chain-marker" id="chain-marker" r="5.5" opacity="0"/>
-        </svg>
-
-        <dl class="game-stats">
-          <div><dt>Rounds</dt><dd id="stat-rounds">0</dd></div>
-          <div><dt>Wins</dt><dd id="stat-wins">0</dd></div>
-          <div><dt>Losses</dt><dd id="stat-losses">0</dd></div>
-          <div><dt>Ties</dt><dd id="stat-ties">0</dd></div>
-          <div><dt>Win rate</dt><dd id="stat-rate">0%</dd></div>
-        </dl>
-
-        <p class="game-verdict" id="game-verdict" aria-live="polite"></p>
-
-        <button type="button" class="reset-btn" id="game-reset">Reset</button>
-      </div>
-    </section>
-
     <section class="now" aria-labelledby="now-title">
       <h2 class="section-title" id="now-title">Open Tabs <time class="updated" id="now-updated" datetime="2026-09">September 2026</time></h2>
       <ul>
@@ -216,7 +119,6 @@
     </div>
   </footer>
 
-  <script src="/game.js" defer></script>
   <script src="/cloud.js" defer></script>
   <script>
   /* Keep the date on the current month. The month in the HTML is the fallback

@@ -346,9 +346,23 @@
     renderChain();
   }
 
+  // The game counts as on screen while at least a quarter of it is visible.
+  // Keys and the demo only work then. Set by the observer at the bottom; without
+  // IntersectionObserver it stays true, as before.
+  var onScreen = true;
+
+  var reducedMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+
+  function motionAllowed() {
+    return !(reducedMotion && reducedMotion.matches);
+  }
+
   // Demo: until someone plays, a fake player throws every 900ms to show how the
-  // grid works. The first real play stops it for good.
+  // grid works. The first real play stops it for good. It starts two seconds
+  // after the game first comes into view, pauses while the game is off screen or
+  // the tab is hidden, and never runs with reduced motion.
   var DEMO_TICK_MS = 900;
+  var DEMO_START_MS = 2000;
   var demoNote = document.getElementById('demo-note');
   var demoTimer = null;
   var demoStartTimer = null;
@@ -366,7 +380,7 @@
   function demoTick() {
     demoTimer = null;
     if (demoStopped) { return; }
-    if (document.hidden) { return; } // resumed on visibilitychange
+    if (document.hidden || !onScreen) { return; } // resumed by updateDemo
 
     demoPrev = demoThrow();
     playRound(demoGame, demoPrev);
@@ -388,25 +402,51 @@
     active = liveGame;
   }
 
-  // Start the demo after two seconds. It doesn't run at all with reduced motion.
-  demoStartTimer = setTimeout(function () {
-    demoStartTimer = null;
+  // Start, pause or resume the demo to match what is on screen. Called whenever
+  // the game scrolls in or out of view, the tab is hidden or shown, or the
+  // motion setting changes.
+  function updateDemo() {
     if (demoStopped) { return; }
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
-    active = demoGame;
-    if (demoNote) { demoNote.hidden = false; }
-    demoTick();
-  }, 2000);
-
-  // Pause the demo while the tab is hidden.
-  document.addEventListener('visibilitychange', function () {
-    if (demoStopped || active !== demoGame) { return; }
-    if (document.hidden) {
+    if (!onScreen || document.hidden || !motionAllowed()) {
+      if (demoStartTimer !== null) { clearTimeout(demoStartTimer); demoStartTimer = null; }
       if (demoTimer !== null) { clearTimeout(demoTimer); demoTimer = null; }
-    } else if (demoTimer === null) {
-      demoTimer = setTimeout(demoTick, DEMO_TICK_MS);
+      return;
     }
-  });
+    if (active === demoGame) {
+      if (demoTimer === null) { demoTimer = setTimeout(demoTick, DEMO_TICK_MS); }
+    } else if (demoStartTimer === null) {
+      demoStartTimer = setTimeout(function () {
+        demoStartTimer = null;
+        if (demoStopped) { return; }
+        active = demoGame;
+        if (demoNote) { demoNote.hidden = false; }
+        demoTick();
+      }, DEMO_START_MS);
+    }
+  }
+
+  document.addEventListener('visibilitychange', updateDemo);
+
+  // Turning on reduced motion mid-demo ends the demo and shows the empty game.
+  function onMotionChange() {
+    if (!motionAllowed()) {
+      if (!demoStopped) {
+        stopDemo();
+        renderStats();
+        renderChain();
+      }
+    } else {
+      updateDemo();
+    }
+  }
+
+  if (reducedMotion) {
+    if (reducedMotion.addEventListener) {
+      reducedMotion.addEventListener('change', onMotionChange);
+    } else if (reducedMotion.addListener) {
+      reducedMotion.addListener(onMotionChange); // older Safari
+    }
+  }
 
   Array.prototype.forEach.call(buttons, function (button) {
     button.addEventListener('click', function () {
@@ -416,10 +456,17 @@
 
   resetBtn.addEventListener('click', reset);
 
+  // Form fields and editable text keep their keys.
+  function isTyping(el) {
+    if (!el) { return false; }
+    var tag = el.tagName;
+    return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el.isContentEditable === true;
+  }
+
+  // R, P and S play only while the game is on screen.
   document.addEventListener('keydown', function (event) {
     if (event.repeat || event.altKey || event.ctrlKey || event.metaKey) { return; }
-    var tag = event.target && event.target.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA') { return; }
+    if (!onScreen || isTyping(event.target)) { return; }
     var key = (event.key || '').toUpperCase();
     if (NAME[key]) {
       event.preventDefault();
@@ -430,4 +477,16 @@
   renderStats();
   renderChain();
   ui.hidden = false;
+
+  // Observe after unhiding, since a hidden element never intersects.
+  if ('IntersectionObserver' in window) {
+    onScreen = false;
+    new IntersectionObserver(function (entries) {
+      var entry = entries[entries.length - 1];
+      onScreen = entry.isIntersecting && entry.intersectionRatio >= 0.25;
+      updateDemo();
+    }, { threshold: [0, 0.25] }).observe(ui);
+  } else {
+    updateDemo();
+  }
 })();

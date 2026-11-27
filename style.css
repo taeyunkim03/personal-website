@@ -472,21 +472,16 @@ button {
   }
 }
 
-/* Game */
+/* Game. It is the figure of its project entry on the projects page. */
 
 .game {
-  margin-top: var(--section);
-  padding: 24px;
+  padding: 16px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 4px;
 }
 
-.game h2 + p {
-  margin-top: 12px;
-}
-
-.game-ui[hidden] {
+.game[hidden] {
   display: none;
 }
 
@@ -494,7 +489,6 @@ button {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 24px;
 }
 
 .throw-btn {
@@ -524,6 +518,13 @@ button {
   margin-top: 8px;
   font-size: 0.875rem;
   color: var(--text-dim);
+}
+
+/* Same size as the project text beside it. */
+.game-result,
+.game-verdict {
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .game-result {
@@ -590,17 +591,17 @@ button {
   }
 }
 
+/* Stacked on phones, where three across would not fit "Scissors" at 320px.
+   Side by side in the 320px figure column, with less padding so they fit. */
 @media (min-width: 640px) {
-  .game {
-    padding: 32px;
-  }
-
   .throws {
     flex-direction: row;
+    gap: 8px;
   }
 
   .throw-btn {
     flex: 1;
+    padding: 0 8px;
   }
 }
 
@@ -986,11 +987,6 @@ button {
 .project:first-child {
   padding-top: 24px;
   border-top: 0;
-}
-
-/* Project without a figure. */
-.project-wide .project-main {
-  display: block;
 }
 
 .project-figure a {

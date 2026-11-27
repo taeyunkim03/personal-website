@@ -161,19 +161,115 @@
         </div>
       </article>
 
-      <!-- No figure for this one. -->
-      <article class="project project-wide">
+      <article class="project" id="game">
         <div class="project-head">
           <h2>Can You Beat a Markov Chain?</h2>
           <p class="project-year">2026</p>
         </div>
         <div class="project-main">
+          <!-- The game is the figure. Hidden until game.js runs, so without
+               JavaScript the entry is text only. -->
+          <div class="project-figure game" id="game-ui" role="group" aria-label="Rock paper scissors against the Markov chain" hidden>
+            <div class="throws" role="group" aria-label="Your throw">
+              <button type="button" class="throw-btn" data-throw="R">Rock</button>
+              <button type="button" class="throw-btn" data-throw="P">Paper</button>
+              <button type="button" class="throw-btn" data-throw="S">Scissors</button>
+            </div>
+            <p class="game-hint">Or press R, P or S.</p>
+
+            <p class="game-result" id="game-result" aria-live="polite"></p>
+
+            <!-- Only shown while the demo is running. -->
+            <p class="demo-note" id="demo-note" hidden>Demo running. Press a button to play.</p>
+
+            <svg class="chain" viewBox="0 0 300 200" width="100%" role="img"
+                 aria-labelledby="chain-title" aria-describedby="chain-desc">
+              <title id="chain-title">The bot's model</title>
+              <desc id="chain-desc">Nine blocks, one per two-throw state. No rounds played yet.</desc>
+              <defs>
+                <marker id="chain-arrow" viewBox="0 0 8 8" refX="4" refY="4"
+                        markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto">
+                  <path d="M0 0.5L7 4L0 7.5Z"/>
+                </marker>
+              </defs>
+              <!-- Edges first so they draw behind the blocks. -->
+              <g id="chain-edges">
+                <path class="chain-edge" id="edge-R" d="" marker-end="url(#chain-arrow)"/>
+                <path class="chain-edge" id="edge-P" d="" marker-end="url(#chain-arrow)"/>
+                <path class="chain-edge" id="edge-S" d="" marker-end="url(#chain-arrow)"/>
+              </g>
+              <g class="chain-block" id="cell-RR">
+                <path class="face face-left" id="left-RR" d=""/>
+                <path class="face face-right" id="right-RR" d=""/>
+                <path class="face face-top" id="top-RR" d=""/>
+                <text class="chain-label" id="label-RR" x="150" y="56">RR</text>
+              </g>
+              <g class="chain-block" id="cell-RP">
+                <path class="face face-left" id="left-RP" d=""/>
+                <path class="face face-right" id="right-RP" d=""/>
+                <path class="face face-top" id="top-RP" d=""/>
+                <text class="chain-label" id="label-RP" x="104" y="83">RP</text>
+              </g>
+              <g class="chain-block" id="cell-PR">
+                <path class="face face-left" id="left-PR" d=""/>
+                <path class="face face-right" id="right-PR" d=""/>
+                <path class="face face-top" id="top-PR" d=""/>
+                <text class="chain-label" id="label-PR" x="196" y="83">PR</text>
+              </g>
+              <g class="chain-block" id="cell-RS">
+                <path class="face face-left" id="left-RS" d=""/>
+                <path class="face face-right" id="right-RS" d=""/>
+                <path class="face face-top" id="top-RS" d=""/>
+                <text class="chain-label" id="label-RS" x="58" y="110">RS</text>
+              </g>
+              <g class="chain-block" id="cell-PP">
+                <path class="face face-left" id="left-PP" d=""/>
+                <path class="face face-right" id="right-PP" d=""/>
+                <path class="face face-top" id="top-PP" d=""/>
+                <text class="chain-label" id="label-PP" x="150" y="110">PP</text>
+              </g>
+              <g class="chain-block" id="cell-SR">
+                <path class="face face-left" id="left-SR" d=""/>
+                <path class="face face-right" id="right-SR" d=""/>
+                <path class="face face-top" id="top-SR" d=""/>
+                <text class="chain-label" id="label-SR" x="242" y="110">SR</text>
+              </g>
+              <g class="chain-block" id="cell-PS">
+                <path class="face face-left" id="left-PS" d=""/>
+                <path class="face face-right" id="right-PS" d=""/>
+                <path class="face face-top" id="top-PS" d=""/>
+                <text class="chain-label" id="label-PS" x="104" y="137">PS</text>
+              </g>
+              <g class="chain-block" id="cell-SP">
+                <path class="face face-left" id="left-SP" d=""/>
+                <path class="face face-right" id="right-SP" d=""/>
+                <path class="face face-top" id="top-SP" d=""/>
+                <text class="chain-label" id="label-SP" x="196" y="137">SP</text>
+              </g>
+              <g class="chain-block" id="cell-SS">
+                <path class="face face-left" id="left-SS" d=""/>
+                <path class="face face-right" id="right-SS" d=""/>
+                <path class="face face-top" id="top-SS" d=""/>
+                <text class="chain-label" id="label-SS" x="150" y="164">SS</text>
+              </g>
+              <circle class="chain-marker" id="chain-marker" r="5.5" opacity="0"/>
+            </svg>
+
+            <dl class="game-stats">
+              <div><dt>Rounds</dt><dd id="stat-rounds">0</dd></div>
+              <div><dt>Wins</dt><dd id="stat-wins">0</dd></div>
+              <div><dt>Losses</dt><dd id="stat-losses">0</dd></div>
+              <div><dt>Ties</dt><dd id="stat-ties">0</dd></div>
+              <div><dt>Win rate</dt><dd id="stat-rate">0%</dd></div>
+            </dl>
+
+            <p class="game-verdict" id="game-verdict" aria-live="polite"></p>
+
+            <button type="button" class="reset-btn" id="game-reset">Reset</button>
+          </div>
           <div class="project-body">
             <p>An order-2 Markov chain that learns your rock paper scissors habits in real time and plays the counter, with the nine-state transition model rendered live so you can watch it learn. Built because people are far worse at generating random sequences than they think.</p>
             <p class="project-tools">JavaScript, Markov chains</p>
-            <ul class="project-links">
-              <li><a href="/#game">Play it</a></li>
-            </ul>
           </div>
         </div>
       </article>
@@ -191,5 +287,7 @@
       </ul>
     </div>
   </footer>
+
+  <script src="/game.js" defer></script>
 </body>
 </html>
